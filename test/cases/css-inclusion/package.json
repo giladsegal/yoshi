@@ -1,0 +1,9 @@
+{
+  "name": "kitchensink",
+  "version": "1.0.0",
+  "license": "UNLICENSED",
+  "private": true,
+  "yoshi": {
+    "projectType": "app"
+  }
+}

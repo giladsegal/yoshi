@@ -1,3 +1,4 @@
+const path = require('path');
 const execa = require('execa');
 const terminate = require('terminate');
 const { promisify } = require('util');
@@ -9,6 +10,8 @@ const defaultOptions = {
   BROWSER: 'none',
 };
 
+const yoshiBin = require.resolve('../packages/yoshi/bin/yoshi-cli');
+
 module.exports = class Scripts {
   constructor({ silent = false, testDirectory }) {
     this.silent = silent;
@@ -18,11 +21,15 @@ module.exports = class Scripts {
   }
 
   async start(env) {
-    const startProcess = execa('npx', ['yoshi', 'start'], {
+    const startProcess = execa('node', [yoshiBin, 'start'], {
       cwd: this.testDirectory,
-      // stdio: 'inherit',
+      stdio: 'inherit',
       env: {
         PORT: this.serverProcessPort,
+        NODE_PATH: path.join(
+          __dirname,
+          '../packages/yoshi-flow-legacy/node_modules',
+        ),
         ...defaultOptions,
         ...env,
       },
@@ -48,7 +55,7 @@ module.exports = class Scripts {
   }
 
   analyze(env = {}) {
-    const buildProcess = execa('npx', ['yoshi', 'build', '--analyze'], {
+    const buildProcess = execa('node', [yoshiBin, 'build', '--analyze'], {
       cwd: this.testDirectory,
       env: {
         ...defaultOptions,
@@ -65,7 +72,7 @@ module.exports = class Scripts {
   }
 
   async build(env = {}, args = []) {
-    return execa('npx', ['yoshi', 'build', ...args], {
+    return execa('node', [yoshiBin, 'build', ...args], {
       cwd: this.testDirectory,
       env: {
         ...defaultOptions,
@@ -76,7 +83,7 @@ module.exports = class Scripts {
   }
 
   async test(env = {}) {
-    return execa('npx', ['yoshi', 'test'], {
+    return execa('node', [yoshiBin, 'test'], {
       cwd: this.testDirectory,
       env: {
         ...defaultOptions,
@@ -87,6 +94,8 @@ module.exports = class Scripts {
   }
 
   async serve() {
+    await this.build();
+
     const staticsServerProcess = execa(
       'npx',
       ['serve', '-p', this.staticsServerPort, '-s', 'dist/statics/'],
@@ -100,6 +109,10 @@ module.exports = class Scripts {
       cwd: this.testDirectory,
       // stdio: 'inherit',
       env: {
+        NODE_PATH: path.join(
+          __dirname,
+          '../packages/yoshi-flow-legacy/node_modules',
+        ),
         PORT: this.serverProcessPort,
       },
     });
