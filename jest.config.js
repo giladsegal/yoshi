@@ -3,4 +3,5 @@ module.exports = {
   rootDir: './test/cases',
   testMatch: ['**/*.test.js'],
   transformIgnorePatterns: ['/node_modules/'],
+  setupTestFrameworkScriptFile: require.resolve('./jest-setup'),
 };

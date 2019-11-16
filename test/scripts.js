@@ -20,10 +20,10 @@ module.exports = class Scripts {
     this.staticsServerPort = 3200;
   }
 
-  async start(env) {
+  async start(callback) {
     const startProcess = execa('node', [yoshiBin, 'start'], {
       cwd: this.testDirectory,
-      stdio: 'inherit',
+      // stdio: 'inherit',
       env: {
         PORT: this.serverProcessPort,
         NODE_PATH: path.join(
@@ -31,7 +31,6 @@ module.exports = class Scripts {
           '../packages/yoshi-flow-legacy/node_modules',
         ),
         ...defaultOptions,
-        ...env,
       },
     });
 
@@ -46,12 +45,11 @@ module.exports = class Scripts {
       startProcess,
     ]);
 
-    return {
-      port: this.serverProcessPort,
-      done() {
-        return terminateAsync(startProcess.pid);
-      },
-    };
+    try {
+      await callback();
+    } finally {
+      await terminateAsync(startProcess.pid);
+    }
   }
 
   analyze(env = {}) {
@@ -93,7 +91,7 @@ module.exports = class Scripts {
     });
   }
 
-  async serve() {
+  async serve(callback) {
     await this.build();
 
     const staticsServerProcess = execa(
@@ -122,15 +120,13 @@ module.exports = class Scripts {
       waitForPort(this.serverProcessPort),
     ]);
 
-    return {
-      staticsServerPort: this.staticsServerPort,
-      appServerProcessPort: this.serverProcessPort,
-      done() {
-        return Promise.all([
-          terminateAsync(staticsServerProcess.pid),
-          terminateAsync(appServerProcess.pid),
-        ]);
-      },
-    };
+    try {
+      await callback();
+    } finally {
+      await Promise.all([
+        terminateAsync(staticsServerProcess.pid),
+        terminateAsync(appServerProcess.pid),
+      ]);
+    }
   }
 };
