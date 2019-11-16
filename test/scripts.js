@@ -21,18 +21,22 @@ module.exports = class Scripts {
   }
 
   async start(callback) {
-    const startProcess = execa('node', [yoshiBin, 'start'], {
-      cwd: this.testDirectory,
-      // stdio: 'inherit',
-      env: {
-        PORT: this.serverProcessPort,
-        NODE_PATH: path.join(
-          __dirname,
-          '../packages/yoshi-flow-legacy/node_modules',
-        ),
-        ...defaultOptions,
+    const startProcess = execa(
+      'node',
+      [yoshiBin, 'start', '--server', 'dist/server.js'],
+      {
+        cwd: this.testDirectory,
+        stdio: 'inherit',
+        env: {
+          PORT: this.serverProcessPort,
+          NODE_PATH: path.join(
+            __dirname,
+            '../packages/yoshi-flow-legacy/node_modules',
+          ),
+          ...defaultOptions,
+        },
       },
-    });
+    );
 
     // `startProcess` will never resolve but if it fails this
     // promise will reject immediately
@@ -99,11 +103,11 @@ module.exports = class Scripts {
       ['serve', '-p', this.staticsServerPort, '-s', 'dist/statics/'],
       {
         cwd: this.testDirectory,
-        // stdio: 'inherit',
+        stdio: 'inherit',
       },
     );
 
-    const appServerProcess = execa('node', ['index.js'], {
+    const appServerProcess = execa('node', ['dist/server.js'], {
       cwd: this.testDirectory,
       // stdio: 'inherit',
       env: {
