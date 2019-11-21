@@ -1,4 +1,4 @@
-import { createAppController } from './appController';
+import { createAppController } from './controller';
 import LaboratoryTestkit from '@wix/wix-experiments/dist/src/laboratory-testkit';
 import { EXPERIMENTS_SCOPE } from '../../config/constants';
 

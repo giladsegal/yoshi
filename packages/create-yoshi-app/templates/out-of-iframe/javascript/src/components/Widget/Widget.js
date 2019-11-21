@@ -7,7 +7,7 @@ import {
 import { TPAComponentsProvider } from 'wix-ui-tpa/TPAComponentsConfig';
 import { Button } from 'wix-ui-tpa/Button';
 import i18n from '../../config/i18n';
-import styles from './Widget.st.css';
+import styles from './Component.st.css';
 
 export default class WidgetRoot extends React.Component {
   render() {

@@ -40,3 +40,8 @@ export async function createAppController(controllerConfig) {
     },
   };
 }
+
+export default function({ frameworkData, appData }) {
+  console.log({ frameworkData, appData });
+  return {};
+}
