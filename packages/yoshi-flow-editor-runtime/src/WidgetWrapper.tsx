@@ -4,6 +4,8 @@ import {
   IWixAPI,
   IHostProps,
 } from '@wix/native-components-infra/dist/src/types/types';
+import { I18nextProvider } from 'react-i18next';
+import i18n from './config/i18n';
 import { createInstances } from './createInstances';
 import { ControllerProvider } from './react/ControllerProvider';
 import { PublicDataProviderEditor } from './react/PublicDataProviderEditor';
@@ -44,14 +46,16 @@ const WidgetWrapper = (UserComponent: typeof React.Component) => (
       <style dangerouslySetInnerHTML={{ __html: css }} />
       <ErrorBoundary handleException={error => console.log(error)}>
         <Suspense fallback={<div>Loading...</div>}>
-          <PublicDataProvider data={props.__publicData__} Wix={window.Wix}>
-            <ControllerProvider data={props}>
-              <UserComponent
-                {...createInstances(props.experiments)}
-                {...props}
-              />
-            </ControllerProvider>
-          </PublicDataProvider>
+          <I18nextProvider i18n={i18n({ locale: 'en' })}>
+            <PublicDataProvider data={props.__publicData__} Wix={window.Wix}>
+              <ControllerProvider data={props}>
+                <UserComponent
+                  {...createInstances(props.experiments)}
+                  {...props}
+                />
+              </ControllerProvider>
+            </PublicDataProvider>
+          </I18nextProvider>
         </Suspense>
       </ErrorBoundary>
     </div>

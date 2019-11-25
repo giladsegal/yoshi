@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes, { InferProps } from 'prop-types';
-import { PublicDataContext, PublicDataType } from './PublicDataContext';
+import { PublicDataContext, IPublicDataContext } from './PublicDataContext';
 
 export class PublicData extends React.Component<
   InferProps<typeof PublicData.propTypes>
@@ -10,10 +10,11 @@ export class PublicData extends React.Component<
   };
 
   render() {
+    const {children}: {children: (x: IPublicDataContext)=>React.Component} = this.props
     return (
       <PublicDataContext.Consumer>
         {publicData => {
-          return this.props.children(publicData);
+          return children(publicData);
         }}
       </PublicDataContext.Consumer>
     );

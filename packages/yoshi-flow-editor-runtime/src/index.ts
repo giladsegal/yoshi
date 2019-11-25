@@ -7,5 +7,7 @@ export * from './react/PublicDataProviderEditor';
 export * from './react/PublicDataProviderViewer';
 export * from './react/PublicDataRenderProp';
 
+export * from './react/TranslationRenderProp';
+
 export * from './react/hooks';
 export * from './react/ErrorBoundary';
