@@ -16,6 +16,7 @@ export class PublicDataProviderViewer extends React.Component<
     try {
       return this.props.data[scope][key];
     } catch (e) {
+      console.error(new Error(`key "${key}" wasn't found on public data:`));
       console.error(e);
       return undefined;
     }
