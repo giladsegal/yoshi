@@ -70,6 +70,9 @@ const createController = async function(
         this.setState({ visibilityFilter });
       },
     },
+    pageReady: () => {
+      console.log('page is ready!');
+    },
     // Expose Corvid API
     corvid: {
       getTodos: () => this.state.todos,

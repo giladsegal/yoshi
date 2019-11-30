@@ -14,8 +14,8 @@
   },
   "include": ["./src/**/*", "./dev/**/*", "./__tests__/**/*"],
   "files": [
-    "./src/external-types.d.ts",
-    "./src/stylable.d.ts",
+    "./src/types/external-types.d.ts",
+    "./src/types/stylable.d.ts",
     "./jest-yoshi.config.js",
     "./node_modules/yoshi-flow-editor/types.d.ts",
     "./node_modules/jest-yoshi-preset/types.d.ts",

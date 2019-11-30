@@ -34,9 +34,9 @@ const PublicDataProvider: typeof React.Component =
 const WidgetWrapper = (UserComponent: typeof React.Component) => (
   props: IHostProps & IFrameworkProps,
 ) => {
-  console.log(props.style);
+  // console.log(props.style);
   const css = getProcessedCss(props.style);
-  console.log(css);
+  // console.log(css);
 
   return (
     <div>

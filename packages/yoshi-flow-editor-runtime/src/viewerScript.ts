@@ -33,11 +33,13 @@ export const createControllers = (
 
       // Run state change callback
       wrappedController.then((userController: any) => {
-        userController.stateChange();
+        if (userController.stateChange) {
+          userController.stateChange();
+        }
       });
 
       // Update render cycle
-      return setProps(updatedState);
+      return setProps({ state: updatedState });
     };
 
     const context = {
