@@ -17,8 +17,15 @@ const EditorAppWrapper = (
     Wix: window.Wix,
     widgetConfig: {
       widgetId: '',
+      getAllPublicData: true,
     },
-    overrides: {},
+    // overrides: {
+    //   fedopsAppName: CART_ICON_APP_NAME,
+    //   fedopsLogger,
+    //   locale: window.__LOCALE__,
+    //   siteBaseUrl: `${window.__APP_MODEL__.topology.baseDomain}/`,
+    //   platform: {baseUrls: {cartIconBaseUrl: window.__BASE_STATIC_URL__}},
+    // },
   });
 
 export default EditorAppWrapper;

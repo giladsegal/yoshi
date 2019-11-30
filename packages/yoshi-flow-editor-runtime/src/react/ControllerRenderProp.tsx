@@ -1,14 +1,11 @@
 import React from 'react';
-import PropTypes, { InferProps } from 'prop-types';
-import { ControllerContext } from './ControllerContext';
+import { ControllerContext, IControllerContext } from './ControllerContext';
 
-export class Controller extends React.Component<
-  InferProps<typeof Controller.propTypes>
-> {
-  static propTypes = {
-    children: PropTypes.func.isRequired,
-  };
+interface IController {
+  children: (ctrl: IControllerContext) => React.ReactNode;
+}
 
+export class Controller extends React.Component<IController> {
   render() {
     return (
       <ControllerContext.Consumer>

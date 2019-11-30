@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { render } from '@testing-library/react';
 import Settings from './Settings';
 
@@ -26,8 +26,8 @@ describe('Settings', () => {
     Styles: {
       getStyleParams: (callback: Function) => callback(styleParams),
       setFontParam: () => {},
-    } as any,
-  } as any;
+    },
+  };
 
   it('should render a color picker component', () => {
     const { getAllByTestId } = render(<Settings />);

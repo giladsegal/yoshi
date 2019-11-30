@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "jsx": "react",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "resolveJsonModule": true,
+    "noEmit": true
+  },
+  "include": ["./src/**/*", "./dev/**/*", "./__tests__/**/*"],
+  "files": [
+    "./src/external-types.d.ts",
+    "./src/stylable.d.ts",
+    "./jest-yoshi.config.js",
+    "./node_modules/yoshi-flow-editor/types.d.ts",
+    "./node_modules/jest-yoshi-preset/types.d.ts",
+    "./dev/server.ts"
+  ]
+}

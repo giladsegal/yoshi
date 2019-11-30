@@ -1,20 +1,20 @@
 import React from 'react';
-import PropTypes, { InferProps } from 'prop-types';
-import { PublicDataContext, IPublicDataContext } from './PublicDataContext';
+import {
+  PublicDataContext,
+  IPublicData as IPublicDataType,
+} from './PublicDataContext';
 
-export class PublicData extends React.Component<
-  InferProps<typeof PublicData.propTypes>
-> {
-  static propTypes = {
-    children: PropTypes.func.isRequired,
-  };
+interface IPublicData {
+  children: (x: IPublicDataType) => React.ReactNode;
+}
 
+export class PublicData extends React.Component<IPublicData> {
   render() {
-    const {children}: {children: (x: IPublicDataContext)=>React.Component} = this.props
+    const { children } = this.props;
     return (
       <PublicDataContext.Consumer>
         {publicData => {
-          return children(publicData);
+          return children((publicData as unknown) as IPublicDataType);
         }}
       </PublicDataContext.Consumer>
     );

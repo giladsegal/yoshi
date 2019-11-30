@@ -10,6 +10,11 @@ export interface IPublicDataContext {
   type: PublicDataType | null;
 }
 
+export interface IPublicData {
+  set: (key: string, value: any) => void;
+  get: (key: string) => any;
+}
+
 export enum PublicDataType {
   ViewerPublicData,
   EditorPublicData,

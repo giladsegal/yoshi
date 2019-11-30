@@ -22,7 +22,7 @@
     "bizmgr": "npm run templates -- business-manager-module business-manager-module-typescript",
     "flow-bm": "npm run templates -- flow-bm-typescript",
     "ooi": "npm run templates -- out-of-iframe out-of-iframe-typescript",
-    "flow-editor": "npm run templates -- flow-editor",
+    "flow-editor": "npm run templates -- flow-editor flow-editor-typescript",
     "dev": "ts-node scripts/dev.js"
   },
   "dependencies": {
