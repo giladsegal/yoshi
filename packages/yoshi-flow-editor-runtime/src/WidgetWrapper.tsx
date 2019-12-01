@@ -5,8 +5,8 @@ import {
   IHostProps,
 } from '@wix/native-components-infra/dist/src/types/types';
 // import { withStyles } from '@wix/native-components-infra';
-// import { I18nextProvider } from 'react-i18next';
-// import i18n from './config/i18n';
+import { I18nextProvider } from 'react-i18next';
+import i18n from './config/i18n';
 import { createInstances } from './createInstances';
 import { ControllerProvider } from './react/ControllerProvider';
 import { PublicDataProviderEditor } from './react/PublicDataProviderEditor';
@@ -25,6 +25,8 @@ interface IFrameworkProps {
   __publicData__: any;
   experiments: any;
 }
+
+const translate = i18n('en');
 
 const PublicDataProvider: typeof React.Component =
   typeof window.Wix === 'undefined'
@@ -49,14 +51,18 @@ const WidgetWrapper = (UserComponent: typeof React.Component) => (
 
       <ErrorBoundary handleException={error => console.log(error)}>
         <Suspense fallback={<div>Loading...</div>}>
-          <PublicDataProvider data={props.__publicData__} Wix={window.Wix}>
-            <ControllerProvider data={(props as unknown) as IControllerContext}>
-              <UserComponent
-                {...createInstances(props.experiments)}
-                {...props}
-              />
-            </ControllerProvider>
-          </PublicDataProvider>
+          <I18nextProvider i18n={translate}>
+            <PublicDataProvider data={props.__publicData__} Wix={window.Wix}>
+              <ControllerProvider
+                data={(props as unknown) as IControllerContext}
+              >
+                <UserComponent
+                  {...createInstances(props.experiments)}
+                  {...props}
+                />
+              </ControllerProvider>
+            </PublicDataProvider>
+          </I18nextProvider>
         </Suspense>
       </ErrorBoundary>
     </div>
