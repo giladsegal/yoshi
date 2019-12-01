@@ -178,7 +178,13 @@ const start: cliCommand = async function(argv, config, model: FlowEditorModel) {
 
   await devEnvironment.start();
 
-  openBrowser(url || config.startUrl || `http://localhost:3000`);
+  openBrowser(
+    url ||
+      config.startUrl || [
+        `https://localhost:3000/todoEditorApp`,
+        'https://localhost:3000/todoSettingsPanel',
+      ],
+  );
 };
 
 export default start;

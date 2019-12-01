@@ -93,6 +93,8 @@ Promise.resolve().then(async () => {
   }
 
   const config = loadConfig();
+  config.servers.cdn.ssl = true;
+
   const model = await generateFlowEditorModel();
 
   const runCommand = (await commands[command]()).default;

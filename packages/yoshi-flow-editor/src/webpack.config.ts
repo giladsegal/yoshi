@@ -27,6 +27,7 @@ const createDefaultOptions = (config: Config) => {
     useAngular: config.isAngularProject,
     devServerUrl: config.servers.cdn.url,
     separateCss,
+    enhancedTpaStyle: true,
   };
 };
 
@@ -55,14 +56,29 @@ export function createClientWebpackConfig(
     isHot,
     isAnalyze,
     forceEmitSourceMaps,
-    exportAsLibraryName: config.exports,
+    exportAsLibraryName: '[name]',
     cssModules: config.cssModules,
     ...defaultOptions,
   });
 
   clientConfig.entry = customEntry;
   clientConfig.resolve!.alias = config.resolveAlias;
-  clientConfig.externals = config.externals;
+  clientConfig.externals = {
+    react: {
+      amd: 'react',
+      umd: 'react',
+      commonjs: 'react',
+      commonjs2: 'react',
+      root: 'React',
+    },
+    'react-dom': {
+      amd: 'reactDOM',
+      umd: 'react-dom',
+      commonjs: 'react-dom',
+      commonjs2: 'react-dom',
+      root: 'ReactDOM',
+    },
+  };
 
   return clientConfig;
 }
