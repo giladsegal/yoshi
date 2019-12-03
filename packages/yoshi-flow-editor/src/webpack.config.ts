@@ -1,9 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import webpack from 'webpack';
-import {
-  validateServerEntry,
-  createServerEntries,
-} from 'yoshi-common/webpack-utils';
+import { createServerEntries } from 'yoshi-common/webpack-utils';
 import { createBaseWebpackConfig } from 'yoshi-common/webpack.config';
 import { Config } from 'yoshi-config/build/config';
 import {
@@ -98,18 +95,13 @@ export function createServerWebpackConfig(
   });
 
   serverConfig.entry = async () => {
-    const serverEntry = validateServerEntry({
-      extensions: serverConfig.resolve!.extensions as Array<string>,
-      yoshiServer: config.yoshiServer,
-    });
+    const serverEntry = '../node_modules/yoshi-flow-editor/build/server/server';
 
     let entryConfig = config.yoshiServer
       ? createServerEntries(serverConfig.context as string)
       : {};
 
-    if (serverEntry) {
-      entryConfig = { ...entryConfig, server: serverEntry };
-    }
+    entryConfig = { ...entryConfig, server: serverEntry };
 
     return entryConfig;
   };

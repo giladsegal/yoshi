@@ -8,7 +8,7 @@
     "email": "{%authorEmail%}"
   },
   "scripts": {
-    "start": "yoshi-flow-editor start --entry-point=dist/server.js",
+    "start": "yoshi-flow-editor start",
     "precommit": "lint-staged",
     "pretest": "yoshi-flow-editor build",
     "test": "yoshi-flow-editor test --jest",
@@ -19,7 +19,6 @@
   "devDependencies": {
     "@testing-library/react": "^9.3.0",
     "@wix/santa-site-renderer-testkit": "^1.59.0",
-    "@wix/wix-http-testkit": "^1.0.997",
     "@types/i18next": "^8.4.5",
     "@types/jest": "^24.0.0",
     "@types/node": "^8.0.0",
@@ -27,8 +26,6 @@
     "@types/react-dom": "~16.9.0",
     "@types/react-i18next": "^7.8.2",
     "@types/testing-library__react": "^9.1.2",
-    "@types/cors": "^2.8.6",
-    "@types/express": "^4.17.2",
     "@types/uuid": "^3.4.6",
     "husky": "~0.14.0",
     "isomorphic-fetch": "^2.2.1",
@@ -37,7 +34,6 @@
     "nock": "^10.0.5",
     "puppeteer": "^1.1.0",
     "react-test-renderer": "~15.6.0",
-    "velocity": "~0.7.0",
     "yoshi-flow-editor": "latest",
     "yoshi-style-dependencies": "^4.6.0"
   },
@@ -57,9 +53,7 @@
     "tpa-style-webpack-plugin": "^1.3.9",
     "uuid": "^3.3.2",
     "wix-ui-tpa": "^1.0.123",
-    "cors": "2.8.5",
     "typescript": "~3.6.0",
-    "@wix/wix-config-emitter": "latest",
     "yoshi-flow-editor-runtime": "*"
   },
   "lint-staged": {

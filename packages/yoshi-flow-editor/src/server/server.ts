@@ -1,19 +1,25 @@
 import fs from 'fs';
+import path from 'path';
 import { Application } from 'express';
 import httpTestkit from '@wix/wix-http-testkit';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import velocityDataPrivate from '../velocity.private.data.json';
-import velocityData from '../velocity.data.json';
+import { Dictionary } from '../types';
+import velocityDataPrivate from './velocity.private.data.json';
+import velocityData from './velocity.data.json';
 import renderVM from './vm';
-
-type Dictionary = { [key: string]: any };
 
 const server = httpTestkit.server({
   port: process.env.PORT ? Number(process.env.PORT) : undefined,
   ssl: {
-    cert: fs.readFileSync('dev/certificates/cert.pem', 'utf-8'),
-    key: fs.readFileSync('dev/certificates/key.pem', 'utf-8'),
+    cert: fs.readFileSync(
+      path.join(__dirname, './certificates/cert.pem'),
+      'utf-8',
+    ),
+    key: fs.readFileSync(
+      path.join(__dirname, './certificates/key.pem'),
+      'utf-8',
+    ),
     passphrase: '1234',
   } as any,
 });
@@ -52,7 +58,7 @@ app.use('/*settingsPanel', (req, res) => {
   res.send(renderVM('./src/templates/settingsPanel.vm', { settingsBundle }));
 });
 
-const state: Dictionary = {};
+const state: Dictionary<string> = {};
 
 app.get('/state', (req, res) => {
   res.json(state[req.query.userId]);
@@ -63,7 +69,7 @@ app.post('/state', (req, res) => {
   res.json({ success: true });
 });
 
-const settings: Dictionary = {};
+const settings: Dictionary<string> = {};
 
 const defaultSettings = {
   title: 'My TODO App!',

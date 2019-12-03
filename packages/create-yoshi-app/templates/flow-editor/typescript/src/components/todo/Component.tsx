@@ -140,10 +140,8 @@ export default () => {
             {publicData => {
               return (
                 <div>
-                  <h1>
-                    {t('app.hello')}
-                    {publicData.get('title')}
-                  </h1>
+                  <h1>{publicData.get('title')}</h1>
+                  <small>{t('translation')}</small>
                   <AddTodo />
                   <TodoList />
                   <Footer />

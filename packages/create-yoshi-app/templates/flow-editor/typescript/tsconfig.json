@@ -18,7 +18,6 @@
     "./src/types/stylable.d.ts",
     "./jest-yoshi.config.js",
     "./node_modules/yoshi-flow-editor/types.d.ts",
-    "./node_modules/jest-yoshi-preset/types.d.ts",
-    "./dev/server.ts"
+    "./node_modules/jest-yoshi-preset/types.d.ts"
   ]
 }
