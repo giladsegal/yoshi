@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { Application } from 'express';
 import httpTestkit from '@wix/wix-http-testkit';
 import bodyParser from 'body-parser';
