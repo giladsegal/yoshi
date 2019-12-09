@@ -25,7 +25,9 @@
     "yoshi-config": "4.23.3",
     "yoshi-flow-editor-runtime": "4.23.2",
     "yoshi-flow-legacy": "4.24.0",
-    "yoshi-helpers": "4.23.5"
+    "yoshi-helpers": "4.23.5",
+    "cors": "^2.8.5",
+    "velocity": "^0.7.2"
   },
   "devDependencies": {
     "@babel/core": "^7.7.4",
@@ -36,8 +38,6 @@
     "@types/webpack-node-externals": "^1.6.3",
     "@wix/wix-bootstrap-testkit": "^1.1.3955",
     "@wix/wix-config-emitter": "^1.0.1395",
-    "@wix/wix-http-testkit": "^1.0.1318",
-    "cors": "^2.8.5",
-    "velocity": "^0.7.2"
+    "@wix/wix-http-testkit": "^1.0.1318"
   }
 }

@@ -1,9 +1,9 @@
 import path from 'path';
-import writeComponentWrapping from './componentWrapping';
-import writeEditorAppWrapping from './editorAppWrapping';
-import writeSettingsWrapping from './settingsWrapping';
-import writeViewerScriptWrapping from './viewerScriptWrapping';
-import wixPrivateMockWrapping from './wixPrivateMockWrapping';
+import writeComponentWrapping from './wrappers/componentWrapping';
+import writeEditorAppWrapping from './wrappers/editorAppWrapping';
+import writeSettingsWrapping from './wrappers/settingsWrapping';
+import writeViewerScriptWrapping from './wrappers/viewerScriptWrapping';
+import wixPrivateMockWrapping from './wrappers/wixPrivateMockWrapping';
 import { FlowEditorModel } from './model';
 
 const generatedWidgetEntriesPath = path.resolve(__dirname, '../tmp/components');

@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { FlowEditorModel, ComponentModel } from './model';
+import { FlowEditorModel, ComponentModel } from '../model';
 
 const widgetWrapperPath = 'yoshi-flow-editor-runtime/build/WidgetWrapper.js';
 
