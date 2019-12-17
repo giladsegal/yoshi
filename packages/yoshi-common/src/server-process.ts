@@ -8,6 +8,7 @@ import { getDevelopmentEnvVars } from 'yoshi-helpers/bootstrap-utils';
 import { SERVER_LOG_FILE } from 'yoshi-config/paths';
 import SocketServer from './socket-server';
 import { PORT } from './utils/constants';
+import { getSocket } from './utils/suricate';
 
 function serverLogPrefixer() {
   return new stream.Transform({
@@ -30,22 +31,32 @@ export default class ServerProcess {
   public socketServer: SocketServer;
   public child?: child_process.ChildProcess;
   private resolve?: (value?: unknown) => void;
+  public suricate: boolean;
+  public appName: string;
 
   constructor({
     cwd,
     serverFilePath,
     socketServer,
+    suricate,
+    appName,
   }: {
     cwd: string;
     serverFilePath: string;
     socketServer: SocketServer;
+    suricate: boolean;
+    appName: string;
   }) {
     this.cwd = cwd;
     this.socketServer = socketServer;
     this.serverFilePath = serverFilePath;
+    this.suricate = suricate;
+    this.appName = appName;
   }
 
   async initialize() {
+    getSocket(this.appName, PORT);
+
     await this.socketServer.initialize();
 
     const bootstrapEnvironmentParams = getDevelopmentEnvVars({
@@ -123,12 +134,22 @@ export default class ServerProcess {
   static async create({
     cwd = process.cwd(),
     serverFilePath,
+    appName,
+    suricate,
   }: {
     cwd?: string;
     serverFilePath: string;
+    appName: string;
+    suricate: boolean;
   }) {
     const socketServer = await SocketServer.create();
 
-    return new ServerProcess({ socketServer, cwd, serverFilePath });
+    return new ServerProcess({
+      socketServer,
+      cwd,
+      serverFilePath,
+      appName,
+      suricate,
+    });
   }
 }

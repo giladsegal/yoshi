@@ -27,7 +27,7 @@ export default (initialConfig: InitialConfig, pkgJson: PackageJson): Config => {
     : singleDir;
 
   const config: Config = {
-    name,
+    name: name!,
     unpkg,
 
     pkgJson,
@@ -81,6 +81,7 @@ export default (initialConfig: InitialConfig, pkgJson: PackageJson): Config => {
 
     isAngularProject: !!dependencies.angular || !!peerDependencies.angular,
     isReactProject: !!dependencies.react || !!peerDependencies.react,
+    suricate: !!initialConfig.suricate,
   };
 
   return config;

@@ -8,6 +8,7 @@ import ServerProcess from './server-process';
 import { WebpackDevServer, host } from './webpack-dev-server';
 import { addEntry, createCompiler } from './webpack-utils';
 import { isTruthy } from './utils/helpers';
+import defaultDevEnvironmentLogger from './default-dev-environment-logger';
 
 const isInteractive = process.stdout.isTTY;
 
@@ -16,7 +17,7 @@ type WebpackStatus = {
   warnings: Array<string>;
 };
 
-type State =
+export type State =
   | {
       status: 'compiling';
     }
@@ -24,6 +25,7 @@ type State =
       status: 'success';
       serverUrls: Urls;
       devServerUrls: Urls;
+      appName: string;
     } & WebpackStatus)
   | ({ status: 'errors' } & WebpackStatus)
   | ({ status: 'warnings' } & WebpackStatus);
@@ -75,6 +77,7 @@ export default class DevEnvironment {
 
         this.store.setState({
           status: 'success',
+          appName: this.webpackDevServer.appName,
           serverUrls,
           devServerUrls,
           ...messages,
@@ -186,11 +189,12 @@ export default class DevEnvironment {
   static async create({
     webpackConfigs,
     serverFilePath,
-    publicPath,
     https,
-    port,
+    webpackDevServerPort,
     enableClientHotUpdates,
     cwd = process.cwd(),
+    appName,
+    suricate,
   }: {
     webpackConfigs: [
       webpack.Configuration,
@@ -198,17 +202,22 @@ export default class DevEnvironment {
       webpack.Configuration?,
     ];
     serverFilePath: string;
-    publicPath: string;
     https: boolean;
-    port: number;
+    webpackDevServerPort: number;
     enableClientHotUpdates: boolean;
     cwd?: string;
+    appName: string;
+    suricate: boolean;
   }): Promise<DevEnvironment> {
     const [clientConfig, serverConfig] = webpackConfigs;
+
+    const publicPath = clientConfig.output!.publicPath!;
 
     const serverProcess = await ServerProcess.create({
       serverFilePath,
       cwd,
+      suricate,
+      appName,
     });
 
     // Add client hot entries
@@ -251,7 +260,9 @@ export default class DevEnvironment {
     const webpackDevServer = new WebpackDevServer(clientCompiler, {
       publicPath,
       https,
-      port,
+      port: webpackDevServerPort,
+      appName,
+      suricate,
     });
 
     const devEnvironment = new DevEnvironment(
@@ -265,6 +276,8 @@ export default class DevEnvironment {
     if (webWorkerCompiler) {
       devEnvironment.startWebWorkerHotUpdate(webWorkerCompiler);
     }
+
+    devEnvironment.store.subscribe(defaultDevEnvironmentLogger);
 
     return devEnvironment;
   }

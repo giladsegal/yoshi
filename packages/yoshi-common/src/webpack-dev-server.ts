@@ -6,6 +6,7 @@ import OriginalWebpackDevServer from 'webpack-dev-server';
 import webpack from 'webpack';
 import { STATICS_DIR } from 'yoshi-config/paths';
 import express from 'express';
+import { getDevServerSocket } from './utils/suricate';
 
 export function redirectMiddleware(
   hostname: string,
@@ -44,6 +45,8 @@ export class WebpackDevServer extends OriginalWebpackDevServer {
   public port: number;
   public https: boolean;
   public compiler: webpack.Compiler;
+  public suricate: boolean;
+  public appName: string;
 
   constructor(
     compiler: webpack.Compiler,
@@ -51,11 +54,15 @@ export class WebpackDevServer extends OriginalWebpackDevServer {
       publicPath,
       https,
       port,
+      suricate,
+      appName,
       cwd = process.cwd(),
     }: {
       publicPath: string;
       https: boolean;
       port: number;
+      suricate: boolean;
+      appName: string;
       cwd?: string;
     },
   ) {
@@ -83,7 +90,13 @@ export class WebpackDevServer extends OriginalWebpackDevServer {
       ],
       before(expressApp) {
         // Send cross origin headers
-        expressApp.use(cors());
+        // TODO - support only suricate URL
+        expressApp.use(
+          cors({
+            origin: (requestOrigin, cb) => cb(null, true),
+            credentials: true,
+          }),
+        );
         // Redirect `.min.(js|css)` to `.(js|css)`
         expressApp.use(redirectMiddleware(host, port));
       },
@@ -92,6 +105,8 @@ export class WebpackDevServer extends OriginalWebpackDevServer {
     this.port = port;
     this.https = https;
     this.compiler = compiler;
+    this.appName = appName;
+    this.suricate = suricate;
   }
 
   // Update sockets with new stats, we use the sockWrite() method
@@ -102,8 +117,12 @@ export class WebpackDevServer extends OriginalWebpackDevServer {
   }
 
   listenPromise() {
+    const listenTarget = this.suricate
+      ? getDevServerSocket(this.appName)
+      : this.port;
+
     return new Promise((resolve, reject) => {
-      super.listen(this.port, host, err => (err ? reject(err) : resolve()));
+      super.listen(listenTarget, host, err => (err ? reject(err) : resolve()));
     });
   }
 }
