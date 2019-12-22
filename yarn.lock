@@ -194,19 +194,7 @@
   dependencies:
     "@babel/types" "^7.7.4"
 
-"@babel/helper-module-transforms@^7.7.4":
-  version "7.7.4"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/@babel/helper-module-transforms/-/helper-module-transforms-7.7.4.tgz#8d7cdb1e1f8ea3d8c38b067345924ac4f8e0879a"
-  integrity sha1-jXzbHh+Oo9jDiwZzRZJKxPjgh5o=
-  dependencies:
-    "@babel/helper-module-imports" "^7.7.4"
-    "@babel/helper-simple-access" "^7.7.4"
-    "@babel/helper-split-export-declaration" "^7.7.4"
-    "@babel/template" "^7.7.4"
-    "@babel/types" "^7.7.4"
-    lodash "^4.17.13"
-
-"@babel/helper-module-transforms@^7.7.5":
+"@babel/helper-module-transforms@^7.7.4", "@babel/helper-module-transforms@^7.7.5":
   version "7.7.5"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/@babel/helper-module-transforms/-/helper-module-transforms-7.7.5.tgz#d044da7ffd91ec967db25cd6748f704b6b244835"
   integrity sha1-0ETaf/2R7JZ9slzWdI9wS2skSDU=
@@ -6046,16 +6034,7 @@ browserslist@4.7.0:
     electron-to-chromium "^1.3.247"
     node-releases "^1.1.29"
 
-browserslist@^4.0.0, browserslist@^4.6.0:
-  version "4.7.3"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/browserslist/-/browserslist-4.7.3.tgz#02341f162b6bcc1e1028e30624815d4924442dc3"
-  integrity sha1-AjQfFitrzB4QKOMGJIFdSSRELcM=
-  dependencies:
-    caniuse-lite "^1.0.30001010"
-    electron-to-chromium "^1.3.306"
-    node-releases "^1.1.40"
-
-browserslist@^4.8.0, browserslist@^4.8.2:
+browserslist@^4.0.0, browserslist@^4.6.0, browserslist@^4.8.0, browserslist@^4.8.2:
   version "4.8.2"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/browserslist/-/browserslist-4.8.2.tgz#b45720ad5fbc8713b7253c20766f701c9a694289"
   integrity sha1-tFcgrV+8hxO3JTwgdm9wHJppQok=
@@ -6396,12 +6375,7 @@ caniuse-api@^3.0.0:
     lodash.memoize "^4.1.2"
     lodash.uniq "^4.5.0"
 
-caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000929, caniuse-lite@^1.0.30000989, caniuse-lite@^1.0.30001010:
-  version "1.0.30001012"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/caniuse-lite/-/caniuse-lite-1.0.30001012.tgz#653ec635e815b9e0fb801890923b0c2079eb34ec"
-  integrity sha1-ZT7GNegVueD7gBiQkjsMIHnrNOw=
-
-caniuse-lite@^1.0.30001012, caniuse-lite@^1.0.30001015:
+caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000929, caniuse-lite@^1.0.30000989, caniuse-lite@^1.0.30001012, caniuse-lite@^1.0.30001015:
   version "1.0.30001015"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/caniuse-lite/-/caniuse-lite-1.0.30001015.tgz#15a7ddf66aba786a71d99626bc8f2b91c6f0f5f0"
   integrity sha1-Fafd9mq6eGpx2ZYmvI8rkcbw9fA=
@@ -8564,7 +8538,7 @@ ejs@2.7.4, ejs@^2.6.1:
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/ejs/-/ejs-2.7.4.tgz#48661287573dcc53e366c7a1ae52c3a120eec9ba"
   integrity sha1-SGYSh1c9zFPjZsehrlLDoSDuybo=
 
-electron-to-chromium@^1.3.103, electron-to-chromium@^1.3.247, electron-to-chromium@^1.3.306, electron-to-chromium@^1.3.322:
+electron-to-chromium@^1.3.103, electron-to-chromium@^1.3.247, electron-to-chromium@^1.3.322:
   version "1.3.322"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/electron-to-chromium/-/electron-to-chromium-1.3.322.tgz#a6f7e1c79025c2b05838e8e344f6e89eb83213a8"
   integrity sha1-pvfhx5AlwrBYOOjjRPbonrgyE6g=
@@ -9045,7 +9019,7 @@ eslint-plugin-react-hooks@^2.3.0:
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/eslint-plugin-react-hooks/-/eslint-plugin-react-hooks-2.3.0.tgz#53e073961f1f5ccf8dd19558036c1fac8c29d99a"
   integrity sha1-U+Bzlh8fXM+N0ZVYA2wfrIwp2Zo=
 
-eslint-plugin-react@7.17.0:
+eslint-plugin-react@7.17.0, eslint-plugin-react@^7.11.1:
   version "7.17.0"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/eslint-plugin-react/-/eslint-plugin-react-7.17.0.tgz#a31b3e134b76046abe3cd278e7482bd35a1d12d7"
   integrity sha1-oxs+E0t2BGq+PNJ450gr01odEtc=
@@ -9060,21 +9034,6 @@ eslint-plugin-react@7.17.0:
     object.values "^1.1.0"
     prop-types "^15.7.2"
     resolve "^1.13.1"
-
-eslint-plugin-react@^7.11.1:
-  version "7.16.0"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/eslint-plugin-react/-/eslint-plugin-react-7.16.0.tgz#9928e4f3e2122ed3ba6a5b56d0303ba3e41d8c09"
-  integrity sha1-mSjk8+ISLtO6altW0DA7o+QdjAk=
-  dependencies:
-    array-includes "^3.0.3"
-    doctrine "^2.1.0"
-    has "^1.0.3"
-    jsx-ast-utils "^2.2.1"
-    object.entries "^1.1.0"
-    object.fromentries "^2.0.0"
-    object.values "^1.1.0"
-    prop-types "^15.7.2"
-    resolve "^1.12.0"
 
 eslint-plugin-wix-style-react@1.0.301:
   version "1.0.301"
@@ -15586,7 +15545,7 @@ node-pre-gyp@^0.14.0:
     semver "^5.3.0"
     tar "^4.4.2"
 
-node-releases@^1.1.29, node-releases@^1.1.3, node-releases@^1.1.40, node-releases@^1.1.42:
+node-releases@^1.1.29, node-releases@^1.1.3, node-releases@^1.1.42:
   version "1.1.42"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/node-releases/-/node-releases-1.1.42.tgz#a999f6a62f8746981f6da90627a8d2fc090bbad7"
   integrity sha1-qZn2pi+HRpgfbakGJ6jS/AkLutc=
@@ -15995,7 +15954,7 @@ object.entries@^1.0.4, object.entries@^1.1.0:
     function-bind "^1.1.1"
     has "^1.0.3"
 
-object.fromentries@^2.0.0, object.fromentries@^2.0.1:
+object.fromentries@^2.0.1:
   version "2.0.1"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/object.fromentries/-/object.fromentries-2.0.1.tgz#050f077855c7af8ae6649f45c80b16ee2d31e704"
   integrity sha1-BQ8HeFXHr4rmZJ9FyAsW7i0x5wQ=
@@ -21293,9 +21252,9 @@ uglify-js@3.4.x:
     source-map "~0.6.1"
 
 uglify-js@^3.1.4:
-  version "3.7.0"
-  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/uglify-js/-/uglify-js-3.7.0.tgz#14b854003386b7a7c045910f43afbc96d2aa5307"
-  integrity sha1-FLhUADOGt6fARZEPQ6+8ltKqUwc=
+  version "3.7.2"
+  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/uglify-js/-/uglify-js-3.7.2.tgz#cb1a601e67536e9ed094a92dd1e333459643d3f9"
+  integrity sha1-yxpgHmdTbp7QlKkt0eMzRZZD0/k=
   dependencies:
     commander "~2.20.3"
     source-map "~0.6.1"
@@ -22780,6 +22739,78 @@ yn@^3.0.0:
   version "3.1.1"
   resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/yn/-/yn-3.1.1.tgz#1e87401a09d767c1d5eab26a6e4c185182d2eb50"
   integrity sha1-HodAGgnXZ8HV6rJqbkwYUYLS61A=
+
+yoshi-common@4.23.5:
+  version "4.23.5"
+  resolved "https://repo.dev.wixpress.com/artifactory/api/npm/npm-repos/yoshi-common/-/yoshi-common-4.23.5.tgz#223d4d60e776321af13e0b1a6780bd7b2bc03fce"
+  integrity sha1-Ij1NYOd2MhrxPgsaZ4C9eyvAP84=
+  dependencies:
+    "@stylable/core" "1.3.1"
+    "@stylable/node" "1.3.1"
+    "@stylable/webpack-plugin" "1.3.1"
+    "@svgr/webpack" "4.3.3"
+    "@zeit/webpack-asset-relocator-loader" "^0.6.2"
+    autoprefixer "9.7.3"
+    babel-loader "8.0.6"
+    build-url "1.3.3"
+    case-sensitive-paths-webpack-plugin "2.2.0"
+    chalk "2.4.2"
+    chokidar "2.1.8"
+    copy-webpack-plugin "5.0.5"
+    cors "2.8.5"
+    detect-port "1.3.0"
+    express "4.17.1"
+    externalize-relative-module-loader "1.0.0"
+    file-loader "3.0.1"
+    filesize "5.0.3"
+    fork-ts-checker-webpack-plugin "1.6.0"
+    fs-extra "7.0.1"
+    globby "9.2.0"
+    graphql "14.5.8"
+    graphql-tag "2.10.1"
+    gzip-size "5.1.1"
+    html-loader "0.5.5"
+    html-webpack-plugin "4.0.0-beta.11"
+    import-cwd "3.0.0"
+    insight "^0.10.3"
+    less "2.7.3"
+    less-loader "4.1.0"
+    lodash "4.17.15"
+    mini-css-extract-plugin "0.5.0"
+    optimize-css-assets-webpack-plugin "5.0.3"
+    petri-specs "1.3.164"
+    postcss-rtl "1.5.0"
+    raw-loader "1.0.0"
+    react-dev-utils "7.0.5"
+    resolve-cwd "3.0.0"
+    rtlcss-webpack-plugin "4.0.3"
+    ruby-haml-loader "1.0.0"
+    semver "5.7.1"
+    sockjs "0.3.19"
+    sockjs-client "1.4.0"
+    source-map-support "0.5.16"
+    svg-inline-loader "0.8.0"
+    svg-url-loader "2.3.3"
+    terser-webpack-plugin "1.4.2"
+    thread-loader "2.1.3"
+    tpa-style-webpack-plugin "1.3.11"
+    ts-loader "6.2.1"
+    unistore "3.5.1"
+    url-loader "1.1.2"
+    wait-port "0.2.6"
+    watchpack "1.6.0"
+    webpack "4.41.2"
+    webpack-bundle-analyzer "3.6.0"
+    webpack-dev-server "3.2.1"
+    webpack-hot-middleware "2.25.0"
+    webpack-manifest-plugin "2.2.0"
+    webpack-node-externals "1.7.2"
+    webpack-sources "1.4.3"
+    wix-tpa-style-loader "1.0.13"
+    worker-loader "2.0.0"
+    xmldoc "1.1.2"
+    yoshi-config "4.23.3"
+    yoshi-helpers "4.23.5"
 
 yoshi-runtime@1.0.367:
   version "1.0.367"

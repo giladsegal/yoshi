@@ -1,7 +1,6 @@
 import arg from 'arg';
 import chalk from 'chalk';
 import DevEnvironment from 'yoshi-common/dev-environment';
-import openBrowser from 'yoshi-common/open-browser';
 import { cliCommand } from '../bin/yoshi-monorepo';
 import {
   createClientWebpackConfig,
@@ -112,12 +111,11 @@ const start: cliCommand = async function(argv, rootConfig, { apps, libs }) {
     appName: pkg.config.name,
     suricate: pkg.config.suricate,
     enableClientHotUpdates: Boolean(pkg.config.hmr),
+    startUrl: url || pkg.config.startUrl,
     cwd: pkg.location,
   });
 
   await devEnvironment.start();
-
-  openBrowser(url || pkg.config.startUrl || `http://localhost:3000`);
 };
 
 export default start;

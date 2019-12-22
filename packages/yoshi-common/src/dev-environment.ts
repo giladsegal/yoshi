@@ -3,12 +3,14 @@ import createStore, { Store } from 'unistore';
 import clearConsole from 'react-dev-utils/clearConsole';
 import formatWebpackMessages from 'react-dev-utils/formatWebpackMessages';
 import { prepareUrls, Urls } from 'react-dev-utils/WebpackDevServerUtils';
+import openBrowser from './open-browser';
 import { PORT } from './utils/constants';
 import ServerProcess from './server-process';
 import { WebpackDevServer, host } from './webpack-dev-server';
 import { addEntry, createCompiler } from './webpack-utils';
 import { isTruthy } from './utils/helpers';
-import defaultDevEnvironmentLogger from './default-dev-environment-logger';
+import { getDevServerSocketPath } from './utils/suricate';
+import devEnvironmentLogger from './dev-environment-logger';
 
 const isInteractive = process.stdout.isTTY;
 
@@ -16,6 +18,8 @@ type WebpackStatus = {
   errors: Array<string>;
   warnings: Array<string>;
 };
+
+type StartUrl = string | Array<string> | null | undefined;
 
 export type State =
   | {
@@ -35,15 +39,18 @@ export default class DevEnvironment {
   private serverProcess: ServerProcess;
   public store: Store<State>;
   private multiCompiler: webpack.MultiCompiler;
+  private startUrl: StartUrl;
 
   constructor(
     webpackDevServer: WebpackDevServer,
     serverProcess: ServerProcess,
     multiCompiler: webpack.MultiCompiler,
+    startUrl?: StartUrl,
   ) {
     this.webpackDevServer = webpackDevServer;
     this.serverProcess = serverProcess;
     this.multiCompiler = multiCompiler;
+    this.startUrl = startUrl;
 
     this.store = createStore<State>();
 
@@ -184,6 +191,8 @@ export default class DevEnvironment {
     await compilationPromise;
 
     await this.serverProcess.initialize();
+
+    openBrowser(this.startUrl || 'http://localhost:3000');
   }
 
   static async create({
@@ -194,7 +203,8 @@ export default class DevEnvironment {
     enableClientHotUpdates,
     cwd = process.cwd(),
     appName,
-    suricate,
+    startUrl,
+    suricate = false,
   }: {
     webpackConfigs: [
       webpack.Configuration,
@@ -207,7 +217,8 @@ export default class DevEnvironment {
     enableClientHotUpdates: boolean;
     cwd?: string;
     appName: string;
-    suricate: boolean;
+    startUrl?: StartUrl;
+    suricate?: boolean;
   }): Promise<DevEnvironment> {
     const [clientConfig, serverConfig] = webpackConfigs;
 
@@ -226,11 +237,15 @@ export default class DevEnvironment {
         throw new Error('client webpack config was created without an entry');
       }
 
+      const socketForHmr = suricate
+        ? getDevServerSocketPath(appName)
+        : publicPath;
+
       clientConfig.entry = addEntry(clientConfig.entry, [
         require.resolve('webpack/hot/dev-server'),
         // Adding the query param with the CDN URL allows HMR when working with a production site
         // because the bundle is requested from "parastorage" we need to specify to open the socket to localhost
-        `${require.resolve('webpack-dev-server/client')}?${publicPath}`,
+        `${require.resolve('webpack-dev-server/client')}?${socketForHmr}`,
       ]);
     }
 
@@ -269,6 +284,7 @@ export default class DevEnvironment {
       webpackDevServer,
       serverProcess,
       multiCompiler,
+      startUrl,
     );
 
     devEnvironment.startServerHotUpdate(serverCompiler);
@@ -277,7 +293,7 @@ export default class DevEnvironment {
       devEnvironment.startWebWorkerHotUpdate(webWorkerCompiler);
     }
 
-    devEnvironment.store.subscribe(defaultDevEnvironmentLogger);
+    devEnvironment.store.subscribe(devEnvironmentLogger);
 
     return devEnvironment;
   }

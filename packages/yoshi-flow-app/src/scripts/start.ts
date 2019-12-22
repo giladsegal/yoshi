@@ -4,7 +4,6 @@ import fs from 'fs-extra';
 import chalk from 'chalk';
 import { TARGET_DIR, BUILD_DIR } from 'yoshi-config/paths';
 import DevEnvironment from 'yoshi-common/dev-environment';
-import openBrowser from 'yoshi-common/open-browser';
 import { isWebWorkerBundle } from 'yoshi-helpers/queries';
 import { cliCommand } from '../bin/yoshi-app';
 import {
@@ -80,6 +79,7 @@ const start: cliCommand = async function(argv, config) {
 
   const clientConfig = createClientWebpackConfig(config, {
     isDev: true,
+    suricate: config.suricate,
     isHot: config.hmr as boolean,
   });
 
@@ -104,12 +104,11 @@ const start: cliCommand = async function(argv, config) {
     serverFilePath: serverEntry,
     suricate: config.suricate,
     appName: config.name,
+    startUrl: url || config.startUrl,
     enableClientHotUpdates: Boolean(config.hmr),
   });
 
   await devEnvironment.start();
-
-  openBrowser(url || config.startUrl || `http://localhost:3000`);
 };
 
 export default start;

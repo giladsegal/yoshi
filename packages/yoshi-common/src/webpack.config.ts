@@ -221,6 +221,7 @@ export function createBaseWebpackConfig({
   useAngular = false,
   separateCss = false,
   keepFunctionNames = false,
+  suricate = false,
   stylableSeparateCss = false,
   experimentalRtlCss = false,
   cssModules = true,
@@ -250,6 +251,7 @@ export function createBaseWebpackConfig({
   useAngular?: boolean;
   separateCss?: boolean;
   keepFunctionNames?: boolean;
+  suricate?: boolean;
   stylableSeparateCss?: boolean;
   experimentalRtlCss?: boolean;
   cssModules?: boolean;
@@ -283,6 +285,8 @@ export function createBaseWebpackConfig({
   });
 
   const publicPath = calculatePublicPath({
+    suricate,
+    appName: name,
     devServerUrl,
     useUnversionedBaseUrl: contentHash,
   });

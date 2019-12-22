@@ -1,6 +1,7 @@
 import chalk from 'chalk';
 import { State } from './dev-environment';
 import { getUrl, getDevServerUrl } from './utils/suricate';
+
 // TODO - add suricate print
 export default (state: State) => {
   switch (state.status) {

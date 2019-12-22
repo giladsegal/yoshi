@@ -9,6 +9,7 @@ import { shouldDeployToCDN, inTeamCity } from 'yoshi-helpers/queries';
 import { getProjectCDNBasePath } from 'yoshi-helpers/utils';
 import { SRC_DIR, ROUTES_DIR } from 'yoshi-config/paths';
 import { isTruthy } from './utils/helpers';
+import { getDevServerUrl } from './utils/suricate';
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 
@@ -159,10 +160,14 @@ function validateServerEntry({
 }
 
 function calculatePublicPath({
+  suricate,
+  appName,
   devServerUrl,
   useUnversionedBaseUrl,
 }: {
   devServerUrl: string;
+  suricate: boolean;
+  appName: string;
   useUnversionedBaseUrl: boolean;
 }) {
   // default public path
@@ -170,8 +175,13 @@ function calculatePublicPath({
 
   if (!inTeamCity() || isDevelopment) {
     // When on local machine or on dev environment,
-    // set the local dev-server url as the public path
-    publicPath = devServerUrl;
+
+    if (suricate) {
+      publicPath = getDevServerUrl(appName);
+    } else {
+      // set the local dev-server url as the public path
+      publicPath = devServerUrl;
+    }
   }
 
   // In case we are running in CI and there is a pom.xml file, change the public path according to the path on the cdn

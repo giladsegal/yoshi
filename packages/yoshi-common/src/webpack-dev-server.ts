@@ -88,6 +88,7 @@ export class WebpackDevServer extends OriginalWebpackDevServer {
         '.ooidev.com',
         '.deviantart.lan',
       ],
+      disableHostCheck: true,
       before(expressApp) {
         // Send cross origin headers
         // TODO - support only suricate URL

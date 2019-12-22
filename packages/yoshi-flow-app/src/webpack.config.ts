@@ -7,6 +7,7 @@ import {
 import { createBaseWebpackConfig } from 'yoshi-common/webpack.config';
 import { defaultEntry } from 'yoshi-helpers/constants';
 import { Config } from 'yoshi-config/build/config';
+
 import {
   isTypescriptProject,
   isSingleEntry,
@@ -44,11 +45,13 @@ export function createClientWebpackConfig(
   {
     isDev,
     isHot,
+    suricate,
     isAnalyze,
     forceEmitSourceMaps,
   }: {
     isDev?: boolean;
     isHot?: boolean;
+    suricate?: boolean;
     isAnalyze?: boolean;
     forceEmitSourceMaps?: boolean;
   } = {},
@@ -65,6 +68,7 @@ export function createClientWebpackConfig(
     isAnalyze,
     forceEmitSourceMaps,
     exportAsLibraryName: config.exports,
+    suricate,
     cssModules: config.cssModules,
     performanceBudget: config.performanceBudget as webpack.PerformanceOptions,
     enhancedTpaStyle: config.enhancedTpaStyle,
