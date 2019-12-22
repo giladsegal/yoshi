@@ -6,7 +6,7 @@ import OriginalWebpackDevServer from 'webpack-dev-server';
 import webpack from 'webpack';
 import { STATICS_DIR } from 'yoshi-config/paths';
 import express from 'express';
-import { getDevServerSocket } from './utils/suricate';
+import { createDevServerSocket as createDevServerTunnelSocket } from './utils/suricate';
 
 export function redirectMiddleware(
   hostname: string,
@@ -119,7 +119,7 @@ export class WebpackDevServer extends OriginalWebpackDevServer {
 
   listenPromise() {
     const listenTarget = this.suricate
-      ? getDevServerSocket(this.appName)
+      ? createDevServerTunnelSocket(this.appName)
       : this.port;
 
     return new Promise((resolve, reject) => {

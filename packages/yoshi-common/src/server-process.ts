@@ -8,7 +8,7 @@ import { getDevelopmentEnvVars } from 'yoshi-helpers/bootstrap-utils';
 import { SERVER_LOG_FILE } from 'yoshi-config/paths';
 import SocketServer from './socket-server';
 import { PORT } from './utils/constants';
-import { getSocket } from './utils/suricate';
+import { createSocket as createTunnelSocket } from './utils/suricate';
 
 function serverLogPrefixer() {
   return new stream.Transform({
@@ -55,7 +55,7 @@ export default class ServerProcess {
   }
 
   async initialize() {
-    getSocket(this.appName, PORT);
+    createTunnelSocket(this.appName, PORT);
 
     await this.socketServer.initialize();
 

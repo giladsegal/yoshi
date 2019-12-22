@@ -28,14 +28,8 @@ const getTunnelId = (namespace: string) => {
   return `${uniqueTunnelId}.${normalizedNamespace}`;
 };
 
-export const getSocket = (namespace: string, targetPort?: number) => {
+export const createSocket = (namespace: string, targetPort?: number) => {
   const targetPortObj = targetPort ? { target: { port: targetPort } } : {};
-
-  console.log({
-    ...targetPortObj,
-    url: suricateURL,
-    tunnelID: getTunnelId(namespace),
-  });
 
   return socket({
     ...targetPortObj,
@@ -50,14 +44,12 @@ export const getUrl = (namespace: string) =>
 export const getDevServerUrl = (appName: string) =>
   getUrl(`${appName}-dev-server`);
 
-export const getDevServerSocket = (appName: string) =>
-  getSocket(`${appName}-dev-server`);
+export const createDevServerSocket = (appName: string) =>
+  createSocket(`${appName}-dev-server`);
 
 //https://bo.wix.com/suricate/tunnel/rany.@wix-generated/?sockPath=/suricate/tunnel/rany.@wix-generated/sockjs-node
 export const getDevServerSocketPath = (appName: string) => {
   const devServerUrl = getDevServerUrl(appName);
-  console.log(
-    `${devServerUrl}?&sockPath=${getPathname(devServerUrl)}sockjs-node`,
-  );
+
   return `${devServerUrl}?&sockPath=${getPathname(devServerUrl)}sockjs-node`;
 };
