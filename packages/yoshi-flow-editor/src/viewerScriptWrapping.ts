@@ -1,36 +1,39 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { Dictionary } from './types';
+import { FlowEditorModel } from './model';
 
 const viewerScriptWrapperPath =
   'yoshi-flow-editor-runtime/build/viewerScript.js';
 
 const viewerScriptWrapper = (
   generatedWidgetEntriesPath: string,
-  userController: Array<string>,
-  userInitApp: string,
+  model: FlowEditorModel,
 ) => {
-  return userController.reduce(
-    (acc: Dictionary<string>, userControllerAbsolutePath) => {
-      const widgetName = path.basename(
-        path.dirname(userControllerAbsolutePath),
-      );
+  return model.components.reduce(
+    (
+      acc: Record<string, string>,
+      component: FlowEditorModel['components'][0],
+    ) => {
       const generatedWidgetEntryPath = path.join(
         generatedWidgetEntriesPath,
-        `${widgetName}ViewerScript.js`,
+        `${component.name}ViewerScript.js`,
       );
 
-      const generateSettingsEntryContent = `
+      const generateControllerEntryContent = `
     import {createControllers as createControllersWrapper, initAppForPage as initAppForPageWrapper} from '${viewerScriptWrapperPath}';
-    import userController from '${userControllerAbsolutePath}';
-    import userInitApp from '${userInitApp}';
+    import userController from '${component.controller}';
+    import userInitApp from '${model.initApp}';
 
     export const initAppForPage = initAppForPageWrapper;
     export const createControllers = createControllersWrapper(userController, userInitApp);`;
 
-      fs.outputFileSync(generatedWidgetEntryPath, generateSettingsEntryContent);
+      fs.outputFileSync(
+        generatedWidgetEntryPath,
+        generateControllerEntryContent,
+      );
 
-      acc[`${widgetName}viewerScript`] = generatedWidgetEntryPath;
+      acc[`${component.name}ViewerScript`] = generatedWidgetEntryPath;
+      acc[`${component.name}Controller`] = component.controller;
 
       return acc;
     },

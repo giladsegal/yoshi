@@ -11,6 +11,7 @@ import {
   createServerWebpackConfig,
   createWebWorkerWebpackConfig,
 } from '../webpack.config';
+import { generateFlowEditorModel } from '../model';
 import {
   buildEditorPlatformEntries,
   buildViewerScriptEntry,
@@ -82,10 +83,12 @@ const start: cliCommand = async function(argv, config) {
     fs.emptyDir(join(TARGET_DIR)),
   ]);
 
+  const model = generateFlowEditorModel();
+
   const clientConfig = createClientWebpackConfig(config, {
     isDev: true,
     isHot: config.hmr as boolean,
-    customEntry: buildEditorPlatformEntries(),
+    customEntry: buildEditorPlatformEntries(model),
   });
 
   const serverConfig = createServerWebpackConfig(config, {
@@ -96,7 +99,7 @@ const start: cliCommand = async function(argv, config) {
   const webWorkerConfig = createWebWorkerWebpackConfig(config, {
     isDev: true,
     isHot: true,
-    customEntry: buildViewerScriptEntry(),
+    customEntry: buildViewerScriptEntry(model),
     webWorkerExternals,
   });
 
