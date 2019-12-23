@@ -1,30 +1,32 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { Dictionary } from './types';
+import { FlowEditorModel } from './model';
 
 const widgetWrapperPath = 'yoshi-flow-editor-runtime/build/WidgetWrapper.js';
 
 const componentWrapper = (
   generatedWidgetEntriesPath: string,
-  userComponents: Array<string>,
+  model: FlowEditorModel,
 ) => {
-  return userComponents.reduce(
-    (acc: Dictionary<string>, widgetAbsolutePath: string) => {
-      const widgetName = path.basename(path.dirname(widgetAbsolutePath));
+  return model.components.reduce(
+    (
+      acc: Record<string, string>,
+      component: FlowEditorModel['components'][0],
+    ) => {
       const generatedWidgetEntryPath = path.join(
         generatedWidgetEntriesPath,
-        `${widgetName}Component.js`,
+        `${component.name}Component.js`,
       );
 
       const generateWidgetEntryContent = `
     import WidgetWrapper from '${widgetWrapperPath}';
-    import Widget from '${widgetAbsolutePath}';
+    import Widget from '${component.component}';
 
     export default { component: WidgetWrapper(Widget)};`;
 
       fs.outputFileSync(generatedWidgetEntryPath, generateWidgetEntryContent);
 
-      acc[`${widgetName}ViewerWidget`] = generatedWidgetEntryPath;
+      acc[`${component.name}ViewerWidget`] = generatedWidgetEntryPath;
 
       return acc;
     },

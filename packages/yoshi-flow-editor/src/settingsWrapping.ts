@@ -1,33 +1,32 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { Dictionary } from './types';
+import { FlowEditorModel } from './model';
 
 const settingsWrapperPath =
   'yoshi-flow-editor-runtime/build/SettingsWrapper.js';
 
 const settingsWrapper = (
   generatedWidgetEntriesPath: string,
-  userSettings: Array<string>,
+  model: FlowEditorModel,
 ) => {
-  return userSettings.reduce(
-    (acc: Dictionary<string>, settingsAbsolutePath: string) => {
-      const widgetName = path.basename(path.dirname(settingsAbsolutePath));
+  return model.settings.reduce(
+    (acc: Record<string, any>, setting: FlowEditorModel['settings'][0]) => {
       const generatedWidgetEntryPath = path.join(
         generatedWidgetEntriesPath,
-        `${widgetName}Settings.js`,
+        `${setting.name}Settings.js`,
       );
 
       const generateSettingsEntryContent = `
     import React from 'react';
     import ReactDOM from 'react-dom';
     import SettingsWrapper from '${settingsWrapperPath}';
-    import Settings from '${settingsAbsolutePath}';
+    import Settings from '${setting.path}';
 
     ReactDOM.render(React.createElement(SettingsWrapper, null, React.createElement(Settings)), document.getElementById('root'));`;
 
       fs.outputFileSync(generatedWidgetEntryPath, generateSettingsEntryContent);
 
-      acc[`${widgetName}SettingsPanel`] = generatedWidgetEntryPath;
+      acc[`${setting.name}SettingsPanel`] = generatedWidgetEntryPath;
 
       return acc;
     },

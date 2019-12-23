@@ -16,11 +16,13 @@ import {
   createWebWorkerWebpackConfig,
 } from '../webpack.config';
 import { cliCommand } from '../bin/yoshi-flow-editor';
+import { generateFlowEditorModel } from '../model';
 import {
   buildEditorPlatformEntries,
   buildViewerScriptEntry,
   webWorkerExternals,
 } from '../buildEditorEntires';
+import { generateCiConfig } from './ciConfigGenerator';
 
 const join = (...dirs: Array<string>) => path.join(process.cwd(), ...dirs);
 
@@ -72,8 +74,10 @@ const build: cliCommand = async function(argv, config) {
   ]);
 
   await copyTemplates();
+  const model = generateFlowEditorModel();
 
   if (inTeamCity()) {
+    generateCiConfig(model);
     const petriSpecs = (await import('yoshi-common/sync-petri-specs')).default;
     const wixMavenStatics = (await import('yoshi-common/maven-statics'))
       .default;
@@ -89,7 +93,7 @@ const build: cliCommand = async function(argv, config) {
     ]);
   }
 
-  const customEntry = buildEditorPlatformEntries();
+  const customEntry = buildEditorPlatformEntries(model);
 
   const clientDebugConfig = createClientWebpackConfig(config, {
     isDev: true,
@@ -107,7 +111,7 @@ const build: cliCommand = async function(argv, config) {
     isDev: true,
   });
 
-  const webWorkerCustomEntry = buildViewerScriptEntry();
+  const webWorkerCustomEntry = buildViewerScriptEntry(model);
 
   const webWorkerConfig = createWebWorkerWebpackConfig(config, {
     isDev: true,

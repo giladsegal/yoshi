@@ -1,26 +1,22 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { Dictionary } from './types';
+import { FlowEditorModel } from './model';
 
 const editorAppWrapperPath =
   'yoshi-flow-editor-runtime/build/EditorAppWrapper.js';
 
 const componentWrapper = (
   generatedWidgetEntriesPath: string,
-  userComponents: Array<string>,
-  userControllers: Array<string>,
-  userInitApp: string,
+  model: FlowEditorModel,
 ) => {
-  return userComponents.reduce(
-    (acc: Dictionary<string>, widgetAbsolutePath: string) => {
-      const widgetName = path.basename(path.dirname(widgetAbsolutePath));
+  return model.components.reduce(
+    (
+      acc: Record<string, string>,
+      component: FlowEditorModel['components'][0],
+    ) => {
       const generatedWidgetEntryPath = path.join(
         generatedWidgetEntriesPath,
-        `${widgetName}EditorApp.js`,
-      );
-
-      const userController = userControllers.find(
-        controller => path.basename(path.dirname(controller)) === widgetName,
+        `${component.name}EditorApp.js`,
       );
 
       const generateWidgetEntryContent = `
@@ -28,9 +24,9 @@ const componentWrapper = (
     import ReactDOM from 'react-dom';
     import EditorAppWrapper from '${editorAppWrapperPath}';
 
-    import Component from '${widgetAbsolutePath}';
-    import createController from '${userController}';
-    import initApp from '${userInitApp}';
+    import Component from '${component.component}';
+    import createController from '${component.controller}';
+    import initApp from '${model.initApp}';
 
     const EditorApp = EditorAppWrapper(Component, createController, initApp);
 
@@ -38,7 +34,7 @@ const componentWrapper = (
 
       fs.outputFileSync(generatedWidgetEntryPath, generateWidgetEntryContent);
 
-      acc[`${widgetName}EditorMode`] = generatedWidgetEntryPath;
+      acc[`${component.name}EditorMode`] = generatedWidgetEntryPath;
 
       return acc;
     },

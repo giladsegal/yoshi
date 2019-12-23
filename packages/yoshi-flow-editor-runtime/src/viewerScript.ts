@@ -1,3 +1,4 @@
+import { IWidgetControllerConfig } from '@wix/native-components-infra/dist/es/src/types/types';
 import { createInstances, objectPromiseAll, fetchFrameworkData } from './utils';
 
 let frameworkData: any;
@@ -5,9 +6,9 @@ let frameworkData: any;
 export const createControllers = (
   createController: Function,
   initApp: Function,
-) => (controllerConfigs: any) => {
-  const wrappedControllers = controllerConfigs.map((controllerConfig: any) => {
-    const { appParams, platformAPIs, wixCodeApi, csrfToken } = controllerConfig;
+) => (controllerConfigs: Array<IWidgetControllerConfig>) => {
+  const wrappedControllers = controllerConfigs.map(controllerConfig => {
+    const { appParams, platformAPIs, wixCodeApi } = controllerConfig;
 
     initializeExperiments();
 
@@ -17,7 +18,6 @@ export const createControllers = (
       appParams,
       platformAPIs,
       wixCodeApi,
-      csrfToken,
     });
 
     const { setProps } = controllerConfig;
