@@ -5,6 +5,7 @@ const { promisify } = require('util');
 const { waitForPort, waitForStdout } = require('./utils');
 
 const terminateAsync = promisify(terminate);
+const isCI = !!process.env.TEAMCITY_VERSION;
 
 const defaultOptions = {
   BROWSER: 'none',
@@ -18,6 +19,18 @@ module.exports = class Scripts {
     this.testDirectory = testDirectory;
     this.serverProcessPort = 3000;
     this.staticsServerPort = 3200;
+
+    //TODO: move yoshiCIDir to tmp folder
+    this.yoshiCIDir = path.join(
+      __dirname,
+      isCI
+        ? './yoshiCIDir/node_modules'
+        : '../packages/yoshi-flow-legacy/node_modules',
+    );
+  }
+
+  cleanupPublish() {
+    this.cleanup && this.cleanup();
   }
 
   async start(callback) {
@@ -29,10 +42,7 @@ module.exports = class Scripts {
         stdio: 'inherit',
         env: {
           PORT: this.serverProcessPort,
-          NODE_PATH: path.join(
-            __dirname,
-            '../packages/yoshi-flow-legacy/node_modules',
-          ),
+          NODE_PATH: this.yoshiCIDir,
           ...defaultOptions,
         },
       },
@@ -88,6 +98,7 @@ module.exports = class Scripts {
     return execa('node', [yoshiBin, 'test'], {
       cwd: this.testDirectory,
       env: {
+        NODE_PATH: this.yoshiCIDir,
         ...defaultOptions,
         ...env,
       },
@@ -111,10 +122,7 @@ module.exports = class Scripts {
       cwd: this.testDirectory,
       // stdio: 'inherit',
       env: {
-        NODE_PATH: path.join(
-          __dirname,
-          '../packages/yoshi-flow-legacy/node_modules',
-        ),
+        NODE_PATH: this.yoshiCIDir,
         PORT: this.serverProcessPort,
       },
     });
