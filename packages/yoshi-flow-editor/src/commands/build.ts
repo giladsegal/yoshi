@@ -22,7 +22,7 @@ import {
   buildViewerScriptEntry,
   webWorkerExternals,
 } from '../buildEditorEntires';
-import { generateCiConfig } from './ciConfigGenerator';
+import { writeCiConfig } from './ciConfigGenerator';
 
 const join = (...dirs: Array<string>) => path.join(process.cwd(), ...dirs);
 
@@ -74,10 +74,12 @@ const build: cliCommand = async function(argv, config) {
   ]);
 
   await copyTemplates();
-  const model = generateFlowEditorModel();
+
+  const model = await generateFlowEditorModel();
 
   if (inTeamCity()) {
-    generateCiConfig(model);
+    await writeCiConfig(model);
+
     const petriSpecs = (await import('yoshi-common/sync-petri-specs')).default;
     const wixMavenStatics = (await import('yoshi-common/maven-statics'))
       .default;

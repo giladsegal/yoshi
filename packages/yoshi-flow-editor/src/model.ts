@@ -7,71 +7,76 @@ export interface FlowEditorModel {
   artifactId: string;
   initApp: string;
   components: Array<ComponentModel>;
-  settings: Array<{ path: string; name: string }>;
 }
 
-export enum COMPONENT_TYPE {
-  WIDGET = 'widget',
-  PAGE = 'page',
-}
+type ComponentType = 'widget' | 'page';
 
 export interface ComponentModel {
   name: string;
-  type: COMPONENT_TYPE;
-  component: string;
-  controller: string;
+  type: ComponentType;
+  fileName: string;
+  controllerFileName: string;
+  settingsFileName: string | null;
   id: string;
 }
 
-function getComponentsModel(
-  components: Array<string>,
-  controllers: Array<string>,
-  type: COMPONENT_TYPE,
-): Array<ComponentModel> {
-  return components.map(component => {
-    const componentName = path.basename(path.dirname(component));
-    const controller = controllers.find(
-      controller => path.basename(path.dirname(controller)) === componentName,
-    );
-    if (!controller) {
-      throw new Error(`Missing controller file for the component in "${component}".
-      Please create "controller.ts" file in "${path.dirname(component)}"`);
-    }
-    return {
-      type,
-      name: componentName,
-      component,
-      controller,
-      // TODO: figure out where widget id should go
-      id: '',
-    };
-  });
+function resolveIfExists(filePath: string) {
+  try {
+    return require.resolve(filePath);
+  } catch (error) {
+    return null;
+  }
 }
 
-function getWidgetsModel(
-  widgets: Array<string>,
-  controllers: Array<string>,
-): Array<ComponentModel> {
-  return getComponentsModel(widgets, controllers, COMPONENT_TYPE.WIDGET);
-}
-
-export function generateFlowEditorModel(): FlowEditorModel {
+export async function generateFlowEditorModel(): Promise<FlowEditorModel> {
   const artifactId = getProjectArtifactId();
 
-  const widgets = globby.sync('./src/components/*/Component.js', {
-    absolute: true,
-  });
-  const controllers = globby.sync('./src/components/*/controller.js', {
-    absolute: true,
-  });
-  const initApp = globby.sync('./src/components/initApp.js', {
-    absolute: true,
-  })[0];
-  const settings = globby.sync('./src/components/*/Settings.js', {
+  const componentsDirectories = await globby('./src/components/*', {
+    onlyDirectories: true,
     absolute: true,
   });
 
-  const widgetsModel = getWidgetsModel(widgets, controllers);
+  const componentsModel: Array<ComponentModel> = componentsDirectories.map(
+    componentDirectory => {
+      const componentName = path.basename(componentDirectory);
+
+      const checkIfExists = (filePath: string) => {
+        return resolveIfExists(path.join(componentDirectory, filePath));
+      };
+
+      const widgetFileName = checkIfExists('Widget');
+      const pageFileName = checkIfExists('Page');
+      const controllerFileName = checkIfExists('controller');
+      const settingsFileName = checkIfExists('Settings');
+
+      if (!controllerFileName) {
+        throw new Error(`Missing controller file for the component in "${componentDirectory}".
+        Please create "controller.js/ts" file in "${path.dirname(
+          componentDirectory,
+        )}" directory`);
+      }
+      if (!widgetFileName && !pageFileName) {
+        throw new Error(`Missing widget or page file for the component in "${componentDirectory}".
+        Please create either Widget.js/ts or Page.js/ts file in "${path.dirname(
+          componentDirectory,
+        )}" directory`);
+      }
+
+      return {
+        name: componentName,
+        fileName: (widgetFileName || pageFileName) as string,
+        type: widgetFileName ? 'widget' : 'page',
+        controllerFileName,
+        settingsFileName,
+        // TODO: import from named export
+        id: '',
+      };
+    },
+  );
+
+  const [initApp] = await globby('./src/components/initApp.js', {
+    absolute: true,
+  });
 
   if (!artifactId) {
     throw new Error(`artifact id not provided.
@@ -79,13 +84,10 @@ export function generateFlowEditorModel(): FlowEditorModel {
   }
 
   return {
+    // TODO: import from named export
     appDefId: '',
     artifactId,
     initApp,
-    components: widgetsModel,
-    settings: settings.map(settingPath => ({
-      path: settingPath,
-      name: path.basename(path.dirname(settingPath)),
-    })),
+    components: componentsModel,
   };
 }

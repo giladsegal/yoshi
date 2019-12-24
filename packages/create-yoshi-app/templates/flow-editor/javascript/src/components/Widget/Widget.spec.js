@@ -3,7 +3,7 @@ import { render } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { ExperimentsProvider } from '@wix/wix-experiments-react';
 import i18n from '../../../__tests__/helpers/i18n.mock';
-import { Widget } from './Component';
+import { Widget } from './Widget';
 
 describe('Widget', () => {
   it('should render a title correctly', async () => {

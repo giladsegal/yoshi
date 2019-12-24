@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { FlowEditorModel } from './model';
+import { FlowEditorModel, ComponentModel } from './model';
 
 const settingsWrapperPath =
   'yoshi-flow-editor-runtime/build/SettingsWrapper.js';
@@ -9,24 +9,24 @@ const settingsWrapper = (
   generatedWidgetEntriesPath: string,
   model: FlowEditorModel,
 ) => {
-  return model.settings.reduce(
-    (acc: Record<string, any>, setting: FlowEditorModel['settings'][0]) => {
+  return model.components.reduce(
+    (acc: Record<string, string>, component: ComponentModel) => {
       const generatedWidgetEntryPath = path.join(
         generatedWidgetEntriesPath,
-        `${setting.name}Settings.js`,
+        `${component.name}Settings.js`,
       );
 
       const generateSettingsEntryContent = `
     import React from 'react';
     import ReactDOM from 'react-dom';
     import SettingsWrapper from '${settingsWrapperPath}';
-    import Settings from '${setting.path}';
+    import Settings from '${component.settingsFileName}';
 
     ReactDOM.render(React.createElement(SettingsWrapper, null, React.createElement(Settings)), document.getElementById('root'));`;
 
       fs.outputFileSync(generatedWidgetEntryPath, generateSettingsEntryContent);
 
-      acc[`${setting.name}SettingsPanel`] = generatedWidgetEntryPath;
+      acc[`${component.name}SettingsPanel`] = generatedWidgetEntryPath;
 
       return acc;
     },

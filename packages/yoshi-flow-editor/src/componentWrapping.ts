@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { FlowEditorModel } from './model';
+import { FlowEditorModel, ComponentModel } from './model';
 
 const widgetWrapperPath = 'yoshi-flow-editor-runtime/build/WidgetWrapper.js';
 
@@ -9,10 +9,7 @@ const componentWrapper = (
   model: FlowEditorModel,
 ) => {
   return model.components.reduce(
-    (
-      acc: Record<string, string>,
-      component: FlowEditorModel['components'][0],
-    ) => {
+    (acc: Record<string, string>, component: ComponentModel) => {
       const generatedWidgetEntryPath = path.join(
         generatedWidgetEntriesPath,
         `${component.name}Component.js`,
@@ -20,7 +17,7 @@ const componentWrapper = (
 
       const generateWidgetEntryContent = `
     import WidgetWrapper from '${widgetWrapperPath}';
-    import Widget from '${component.component}';
+    import Widget from '${component.fileName}';
 
     export default { component: WidgetWrapper(Widget)};`;
 

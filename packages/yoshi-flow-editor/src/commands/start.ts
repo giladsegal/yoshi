@@ -83,7 +83,7 @@ const start: cliCommand = async function(argv, config) {
     fs.emptyDir(join(TARGET_DIR)),
   ]);
 
-  const model = generateFlowEditorModel();
+  const model = await generateFlowEditorModel();
 
   const clientConfig = createClientWebpackConfig(config, {
     isDev: true,

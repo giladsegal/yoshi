@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { FlowEditorModel } from './model';
+import { FlowEditorModel, ComponentModel } from './model';
 
 const editorAppWrapperPath =
   'yoshi-flow-editor-runtime/build/EditorAppWrapper.js';
@@ -10,10 +10,7 @@ const componentWrapper = (
   model: FlowEditorModel,
 ) => {
   return model.components.reduce(
-    (
-      acc: Record<string, string>,
-      component: FlowEditorModel['components'][0],
-    ) => {
+    (acc: Record<string, string>, component: ComponentModel) => {
       const generatedWidgetEntryPath = path.join(
         generatedWidgetEntriesPath,
         `${component.name}EditorApp.js`,
@@ -24,8 +21,8 @@ const componentWrapper = (
     import ReactDOM from 'react-dom';
     import EditorAppWrapper from '${editorAppWrapperPath}';
 
-    import Component from '${component.component}';
-    import createController from '${component.controller}';
+    import Component from '${component.fileName}';
+    import createController from '${component.controllerFileName}';
     import initApp from '${model.initApp}';
 
     const EditorApp = EditorAppWrapper(Component, createController, initApp);

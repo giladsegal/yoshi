@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { FlowEditorModel } from './model';
+import { FlowEditorModel, ComponentModel } from './model';
 
 const viewerScriptWrapperPath =
   'yoshi-flow-editor-runtime/build/viewerScript.js';
@@ -10,10 +10,7 @@ const viewerScriptWrapper = (
   model: FlowEditorModel,
 ) => {
   return model.components.reduce(
-    (
-      acc: Record<string, string>,
-      component: FlowEditorModel['components'][0],
-    ) => {
+    (acc: Record<string, string>, component: ComponentModel) => {
       const generatedWidgetEntryPath = path.join(
         generatedWidgetEntriesPath,
         `${component.name}ViewerScript.js`,
@@ -21,7 +18,7 @@ const viewerScriptWrapper = (
 
       const generateControllerEntryContent = `
     import {createControllers as createControllersWrapper, initAppForPage as initAppForPageWrapper} from '${viewerScriptWrapperPath}';
-    import userController from '${component.controller}';
+    import userController from '${component.controllerFileName}';
     import userInitApp from '${model.initApp}';
 
     export const initAppForPage = initAppForPageWrapper;
@@ -33,7 +30,7 @@ const viewerScriptWrapper = (
       );
 
       acc[`${component.name}ViewerScript`] = generatedWidgetEntryPath;
-      acc[`${component.name}Controller`] = component.controller;
+      acc[`${component.name}Controller`] = component.controllerFileName;
 
       return acc;
     },
