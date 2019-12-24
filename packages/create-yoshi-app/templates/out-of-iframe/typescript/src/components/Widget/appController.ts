@@ -3,8 +3,15 @@ import Experiments from '@wix/wix-experiments';
 import {
   IWidgetControllerConfig,
   IWidgetController,
+  IWixWindow,
 } from '@wix/native-components-infra/dist/src/types/types';
 import { EXPERIMENTS_SCOPE } from '../../config/constants';
+
+export interface IMultiLangFields {
+  isPrimaryLanguage: boolean;
+  locale: string;
+  lang: string;
+}
 
 function getSiteLanguage({ wixCodeApi }: IWidgetControllerConfig): string {
   if (wixCodeApi.window.multilingual.isEnabled) {
@@ -23,12 +30,60 @@ async function getExperimentsByScope(scope: string) {
   return experiments.all();
 }
 
+export function getTranslationPath(baseUrl: string, locale: string): string {
+  return `${baseUrl}assets/locales/messages_${locale}.json`;
+}
+
+async function getTranslations(
+  baseUrl: string,
+  locale: string,
+): Promise<Record<string, string>> {
+  const translationPath = getTranslationPath(baseUrl, locale);
+  return fetch(translationPath, {
+    method: 'get',
+  })
+    .then(response => response.json())
+    .catch(e => {
+      throw new Error(`Could not fetch ${translationPath}
+        original error: ${e.message}`);
+    });
+}
+
+function getMultiLangFields(
+  multilingual: IWixWindow['multilingual'],
+): IMultiLangFields {
+  const currentShortLang = multilingual.currentLanguage;
+  const currentLang = multilingual.siteLanguages.find(
+    lang => lang.languageCode === currentShortLang,
+  );
+  if (currentLang) {
+    return {
+      isPrimaryLanguage: currentLang.isPrimaryLanguage,
+      lang: currentShortLang,
+      locale: currentLang.locale,
+    };
+  }
+
+  return {
+    isPrimaryLanguage: true,
+    lang: 'en',
+    locale: 'en',
+  };
+}
+
 export async function createAppController(
   controllerConfig: IWidgetControllerConfig,
 ): Promise<IWidgetController> {
   const { appParams, setProps } = controllerConfig;
   const language = getSiteLanguage(controllerConfig);
   const experiments = await getExperimentsByScope(EXPERIMENTS_SCOPE);
+  const fields = getMultiLangFields(
+    controllerConfig.wixCodeApi.window.multilingual,
+  );
+  const translations = await getTranslations(
+    appParams.baseUrls.staticsBaseUrl,
+    fields.locale,
+  );
 
   return {
     pageReady() {
@@ -37,6 +92,7 @@ export async function createAppController(
         cssBaseUrl: appParams.baseUrls.staticsBaseUrl,
         language,
         experiments,
+        translations,
       });
     },
   };

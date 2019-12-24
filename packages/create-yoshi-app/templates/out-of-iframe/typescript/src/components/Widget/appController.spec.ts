@@ -2,6 +2,7 @@ import LaboratoryTestkit from '@wix/wix-experiments/dist/src/laboratory-testkit'
 import { ExperimentsBag } from '@wix/wix-experiments';
 import { EXPERIMENTS_SCOPE } from '../../config/constants';
 
+import { mockTranslations } from '../../viewerApp/viewerScript.spec';
 import { createAppController } from './appController';
 
 export function mockExperiments(
@@ -17,30 +18,43 @@ export function mockExperiments(
 
 describe('createAppController', () => {
   it('should call setProps with data', async () => {
-    mockExperiments(EXPERIMENTS_SCOPE, { someExperiment: 'true' });
+    const language = 'en-US';
+    const experiments = { someExperiment: 'true' };
     const setPropsSpy = jest.fn();
     const appParams: any = {
       baseUrls: {
         staticsBaseUrl: 'http://some-static-url.com',
       },
     };
-    const language = 'en-US';
-    const experiments = { someExperiment: 'true' };
-
-    const controller = await createAppController({
+    const widgetConfig: any = {
       appParams,
       setProps: setPropsSpy,
       wixCodeApi: {
         window: {
           multilingual: {
             isEnabled: false,
+            currentLanguage: 'en',
+            siteLanguages: [
+              {
+                languageCode: 'en',
+                isPrimaryLanguage: true,
+                locale: 'en',
+              },
+            ],
           },
         },
         site: {
           language,
         },
       },
-    } as any);
+    };
+    mockExperiments(EXPERIMENTS_SCOPE, { someExperiment: 'true' });
+    mockTranslations(
+      appParams.baseUrls.staticsBaseUrl,
+      widgetConfig.wixCodeApi.window.multilingual.currentLanguage,
+    );
+
+    const controller = await createAppController(widgetConfig);
 
     controller.pageReady();
 
@@ -49,6 +63,9 @@ describe('createAppController', () => {
       cssBaseUrl: appParams.baseUrls.staticsBaseUrl,
       language,
       experiments,
+      translations: {
+        'app.hello': 'Hello',
+      },
     });
   });
 });
