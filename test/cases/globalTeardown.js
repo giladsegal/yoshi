@@ -1,3 +1,3 @@
 module.exports = async () => {
-  this.gloabal.cleanup && this.gloabal.cleanup();
+  this.global.cleanup && this.global.cleanup();
 };
