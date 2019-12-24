@@ -2,7 +2,7 @@ const path = require('path');
 const execa = require('execa');
 const terminate = require('terminate');
 const { promisify } = require('util');
-const { waitForPort, waitForStdout } = require('./utils');
+const { waitForPort } = require('./utils');
 
 const terminateAsync = promisify(terminate);
 const isCI = !!process.env.TEAMCITY_VERSION;
@@ -54,7 +54,7 @@ module.exports = class Scripts {
       Promise.all([
         waitForPort(this.serverProcessPort, { timeout: 60 * 1000 }),
         waitForPort(this.staticsServerPort, { timeout: 60 * 1000 }),
-        waitForStdout(startProcess, 'Compiled successfully!'),
+        // waitForStdout(startProcess, 'Compiled successfully!'),
       ]),
       startProcess,
     ]);
