@@ -1,17 +1,26 @@
 import path from 'path';
-import componentWrapping from './componentWrapping';
-import editorAppWrapping from './editorAppWrapping';
-import settingsWrapping from './settingsWrapping';
-import viewerScriptWrapping from './viewerScriptWrapping';
+import writeComponentWrapping from './componentWrapping';
+import writeEditorAppWrapping from './editorAppWrapping';
+import writeSettingsWrapping from './settingsWrapping';
+import writeViewerScriptWrapping from './viewerScriptWrapping';
 import wixPrivateMockWrapping from './wixPrivateMockWrapping';
 import { FlowEditorModel } from './model';
 
 const generatedWidgetEntriesPath = path.resolve(__dirname, '../tmp/components');
 
 export const buildEditorPlatformEntries = (model: FlowEditorModel) => {
-  const componentEntries = componentWrapping(generatedWidgetEntriesPath, model);
-  const editorAppEntries = editorAppWrapping(generatedWidgetEntriesPath, model);
-  const settingsEntries = settingsWrapping(generatedWidgetEntriesPath, model);
+  const componentEntries = writeComponentWrapping(
+    generatedWidgetEntriesPath,
+    model,
+  );
+  const editorAppEntries = writeEditorAppWrapping(
+    generatedWidgetEntriesPath,
+    model,
+  );
+  const settingsEntries = writeSettingsWrapping(
+    generatedWidgetEntriesPath,
+    model,
+  );
 
   const wixPrivateMockEntry = wixPrivateMockWrapping();
 
@@ -24,7 +33,7 @@ export const buildEditorPlatformEntries = (model: FlowEditorModel) => {
 };
 
 export const buildViewerScriptEntry = (model: FlowEditorModel) => {
-  return viewerScriptWrapping(generatedWidgetEntriesPath, model);
+  return writeViewerScriptWrapping(generatedWidgetEntriesPath, model);
 };
 
 export const webWorkerExternals = {

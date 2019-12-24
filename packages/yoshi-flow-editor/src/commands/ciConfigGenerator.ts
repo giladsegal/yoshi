@@ -33,7 +33,7 @@ function generateWidgetComponentUrl(
   return `widgets[?(@.widgetId=='${id}')].componentFields.componentUrl=>https://static.parastorage.com/services/${baseUrl}/{version}/${name}.bundle.min.js`;
 }
 
-export function generateCiConfig(model: FlowEditorModel) {
+export function writeCiConfig(model: FlowEditorModel): Promise<void> {
   const appName = model.components[0].name;
   const baseUrl = model.artifactId;
   const ciConfig = {
@@ -45,5 +45,5 @@ export function generateCiConfig(model: FlowEditorModel) {
     ],
   };
 
-  fs.outputJson(CI_CONFIG, ciConfig, { spaces: 2 });
+  return fs.outputJson(CI_CONFIG, ciConfig, { spaces: 2 });
 }
