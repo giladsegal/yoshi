@@ -76,14 +76,13 @@ export async function createAppController(
 ): Promise<IWidgetController> {
   const { appParams, setProps } = controllerConfig;
   const language = getSiteLanguage(controllerConfig);
-  const experiments = await getExperimentsByScope(EXPERIMENTS_SCOPE);
   const fields = getMultiLangFields(
     controllerConfig.wixCodeApi.window.multilingual,
   );
-  const translations = await getTranslations(
-    appParams.baseUrls.staticsBaseUrl,
-    fields.locale,
-  );
+  const [translations, experiments] = await Promise.all([
+    getTranslations(appParams.baseUrls.staticsBaseUrl, fields.locale),
+    getExperimentsByScope(EXPERIMENTS_SCOPE),
+  ]);
 
   return {
     pageReady() {
