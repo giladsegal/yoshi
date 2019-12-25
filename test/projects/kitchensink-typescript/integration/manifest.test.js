@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs-extra');
-const { ciEnv } = require('../../../../scripts/utils/constants');
+const { ciEnv, localEnv } = require('../../../../scripts/utils/constants');
 
 jest.setTimeout(60 * 1000);
 
