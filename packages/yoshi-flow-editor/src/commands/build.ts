@@ -16,7 +16,7 @@ import {
   createWebWorkerWebpackConfig,
 } from '../webpack.config';
 import { cliCommand } from '../bin/yoshi-flow-editor';
-import { generateFlowEditorModel } from '../model';
+import { FlowEditorModel } from '../model';
 import {
   buildEditorPlatformEntries,
   buildViewerScriptEntry,
@@ -26,7 +26,7 @@ import { writeCiConfig } from './ciConfigGenerator';
 
 const join = (...dirs: Array<string>) => path.join(process.cwd(), ...dirs);
 
-const build: cliCommand = async function(argv, config) {
+const build: cliCommand = async function(argv, config, model: FlowEditorModel) {
   const args = arg(
     {
       // Types
@@ -74,8 +74,6 @@ const build: cliCommand = async function(argv, config) {
   ]);
 
   await copyTemplates();
-
-  const model = await generateFlowEditorModel();
 
   if (inTeamCity()) {
     await writeCiConfig(model);
