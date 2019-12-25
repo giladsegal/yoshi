@@ -8,7 +8,7 @@ const scripts = new Scripts({
   silent: true,
 });
 
-it.each(['serve', 'start'])('css inclusion %s', async command => {
+it.each(['serveWithCallback', 'startWithCallback'])('css inclusion %s', async command => {
   await scripts[command](async () => {
     await page.goto('http://localhost:3000');
     const className = await page.$eval('#css-inclusion', elm =>

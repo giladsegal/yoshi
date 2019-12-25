@@ -25,7 +25,7 @@ module.exports = class Scripts {
     );
   }
 
-  async start(callback = () => {}) {
+  async startWithCallback(callback = () => {}) {
     const startProcess = execa(
       'node',
       [yoshiBin, 'start', '--server', 'dist/server.js'],
@@ -98,7 +98,71 @@ module.exports = class Scripts {
     });
   }
 
-  async serve(callback = () => {}) {
+  async start(env) {
+    const startProcess = execa('npx', ['yoshi', 'start'], {
+      cwd: this.testDirectory,
+      // stdio: 'inherit',
+      env: {
+        PORT: this.serverProcessPort,
+        ...defaultOptions,
+        ...env,
+      },
+    });
+
+    // `startProcess` will never resolve but if it fails this
+    // promise will reject immediately
+    await Promise.race([
+      Promise.all([
+        waitForPort(this.serverProcessPort, { timeout: 60 * 1000 }),
+        waitForPort(this.staticsServerPort, { timeout: 60 * 1000 }),
+        waitForStdout(startProcess, 'Compiled successfully!'),
+      ]),
+      startProcess,
+    ]);
+
+    return {
+      port: this.serverProcessPort,
+      done() {
+        return terminateAsync(startProcess.pid);
+      },
+    };
+  }
+
+  async serve() {
+    const staticsServerProcess = execa(
+      'npx',
+      ['serve', '-p', this.staticsServerPort, '-s', 'dist/statics/'],
+      {
+        cwd: this.testDirectory,
+        // stdio: 'inherit',
+      },
+    );
+
+    const appServerProcess = execa('node', ['index.js'], {
+      cwd: this.testDirectory,
+      // stdio: 'inherit',
+      env: {
+        PORT: this.serverProcessPort,
+      },
+    });
+
+    await Promise.all([
+      waitForPort(this.staticsServerPort),
+      waitForPort(this.serverProcessPort),
+    ]);
+
+    return {
+      staticsServerPort: this.staticsServerPort,
+      appServerProcessPort: this.serverProcessPort,
+      done() {
+        return Promise.all([
+          terminateAsync(staticsServerProcess.pid),
+          terminateAsync(appServerProcess.pid),
+        ]);
+      },
+    };
+  }
+  async serveWithCallback(callback = () => {}) {
     await this.build();
 
     const staticsServerProcess = execa(
