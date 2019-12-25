@@ -2,7 +2,14 @@
   "name": "css-inclusion",
   "private": true,
   "yoshi": {
-    "projectType": "app"
+    "projectType": "app",
+    "servers": {
+      "cdn": {
+        "port": 3201,
+        "dir": "dist/statics",
+        "ssl": false
+      }
+    }
   },
   "jest": {
     "preset": "jest-yoshi-preset"

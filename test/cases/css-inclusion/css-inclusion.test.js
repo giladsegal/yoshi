@@ -1,18 +1,25 @@
 const path = require('path');
 const { matchCSS } = require('../../utils');
 const Scripts = require('../../scripts');
+const { get } = require('lodash');
+const { yoshi } = require('./package.json');
 const { localEnv } = require('../../../scripts/utils/constants');
+
+const serverProcessPort = 3001;
+const staticsServerPort = get(yoshi, 'servers.cdn.port');
 
 const scripts = new Scripts({
   testDirectory: path.join(__dirname),
   silent: true,
+  serverProcessPort,
+  staticsServerPort,
 });
 
 it.each(['serveWithCallback', 'startWithCallback'])(
   'css inclusion %s',
   async command => {
     await scripts[command](async () => {
-      await page.goto('http://localhost:3000');
+      await page.goto(`http://localhost:${serverProcessPort}`);
       const className = await page.$eval('#css-inclusion', elm =>
         elm.getAttribute('class'),
       );
