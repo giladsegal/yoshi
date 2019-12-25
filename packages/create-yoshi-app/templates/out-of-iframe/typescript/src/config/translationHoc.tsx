@@ -30,26 +30,24 @@ function translate(key: string, replaces: { [p: string]: string }): string {
 function getTranslationWithValue(
   translations: Record<string, string>,
 ): TranslationFunction {
-  return (translationKey: string, values: {}) => {
+  return (translationKey: string, values: Record<string, string>) => {
     return translations[translationKey] === undefined
       ? translationKey
       : translate(translations[translationKey], values);
   };
 }
 
-export const withTranslations = (
-  Component: any,
-): React.FunctionComponent | any =>
-  React.forwardRef((props, ref) => {
-    return (
-      <TranslationContext.Consumer>
-        {translations => (
-          <Component
-            {...props}
-            ref={ref}
-            t={getTranslationWithValue(translations)}
-          />
-        )}
-      </TranslationContext.Consumer>
-    );
-  });
+export interface TranslationProps {
+  t(translationKey: string, values?: Record<string, string>): string;
+}
+export function withTranslations<T extends TranslationProps>(
+  Component: React.ComponentType<T>,
+) {
+  return (props: T) => (
+    <TranslationContext.Consumer>
+      {translations => (
+        <Component {...props} t={getTranslationWithValue(translations)} />
+      )}
+    </TranslationContext.Consumer>
+  );
+}

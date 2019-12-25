@@ -8,6 +8,7 @@ import { ExperimentsBag } from '@wix/wix-experiments';
 import {
   TranslationProvider,
   withTranslations,
+  TranslationProps,
 } from '../../config/translationHoc';
 import styles from './Widget.st.css';
 
@@ -35,16 +36,18 @@ export default class WidgetRoot extends React.Component<IWidgetRootProps> {
 }
 
 export const Widget = withExperiments<any>(
-  withTranslations(({ name, t, ...rest }) => {
-    return (
-      <div {...styles('root', {}, rest)}>
-        <div className={styles.header}>
-          <h2 data-testid="app-title">
-            {t('app.hello')} {name}!
-          </h2>
+  withTranslations<IWidgetRootProps & TranslationProps>(
+    ({ name, t, ...rest }) => {
+      return (
+        <div {...styles('root', {}, rest)}>
+          <div className={styles.header}>
+            <h2 data-testid="app-title">
+              {t('app.hello')} {name}!
+            </h2>
+          </div>
+          <Button className={styles.mainButton}>click me</Button>
         </div>
-        <Button className={styles.mainButton}>click me</Button>
-      </div>
-    );
-  }),
+      );
+    },
+  ),
 );
