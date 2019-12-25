@@ -60,7 +60,7 @@ describe('manifest', () => {
     });
 
     it('generates manifest stat file', async () => {
-      startResult = await global.scripts.start(localEnv);
+      startResult = await global.scripts.start();
 
       const statsFilePath = path.join(
         process.env.TEST_DIRECTORY,

@@ -75,7 +75,7 @@ module.exports = async ({
       console.log(chalk.blue(`> Starting project for development`));
       console.log();
 
-      const startResult = await scripts.start(localEnv);
+      const startResult = await scripts.start();
 
       try {
         console.log();
