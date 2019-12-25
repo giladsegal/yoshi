@@ -45,7 +45,7 @@ module.exports = class Scripts {
       Promise.all([
         waitForPort(this.serverProcessPort, { timeout: 60 * 1000 }),
         waitForPort(this.staticsServerPort, { timeout: 60 * 1000 }),
-        // waitForStdout(startProcess, 'Compiled successfully!'),
+        waitForStdout(startProcess, 'Compiled successfully!'),
       ]),
       startProcess,
     ]);
