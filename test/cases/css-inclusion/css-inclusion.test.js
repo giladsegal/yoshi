@@ -1,19 +1,12 @@
 const path = require('path');
 const { matchCSS } = require('../../utils');
 const Scripts = require('../../scripts');
-
-const localEnv = {
-  BUILD_NUMBER: '',
-  TEAMCITY_VERSION: '',
-  ARTIFACT_VERSION: '',
-};
+const { localEnv } = require('../../../scripts/utils/constants');
 
 const scripts = new Scripts({
   testDirectory: path.join(__dirname),
   silent: true,
 });
-
-// afterEach(() => scripts.cleanupPublish());
 
 it.each(['serve', 'start'])('css inclusion %s', async command => {
   await scripts[command](async () => {
@@ -29,6 +22,6 @@ it.each(['serve', 'start'])('css inclusion %s', async command => {
 });
 
 it('should run component test', async () => {
-  //on for ciEnv, do we need build?
+  //any reason to run this one in ciEnv as well?
   await scripts.test(localEnv);
 });
