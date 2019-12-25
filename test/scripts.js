@@ -2,7 +2,7 @@ const path = require('path');
 const execa = require('execa');
 const terminate = require('terminate');
 const { promisify } = require('util');
-const { waitForPort } = require('./utils');
+const { waitForPort, waitForStdout } = require('./utils');
 
 const terminateAsync = promisify(terminate);
 const isCI = !!process.env.TEAMCITY_VERSION;
@@ -19,10 +19,9 @@ module.exports = class Scripts {
     this.testDirectory = testDirectory;
     this.serverProcessPort = 3000;
     this.staticsServerPort = 3200;
-    this.yoshiCIDir = isCI ? `${global.testDirectory}/node_modules` : path.join(
-      __dirname,
-      '../packages/yoshi-flow-legacy/node_modules',
-    );
+    this.yoshiCIDir = isCI
+      ? `${global.testDirectory}/node_modules`
+      : path.join(__dirname, '../packages/yoshi-flow-legacy/node_modules');
   }
 
   async startWithCallback(callback = () => {}) {
