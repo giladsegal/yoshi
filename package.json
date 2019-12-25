@@ -29,6 +29,7 @@
     "test:client": "npm run client --prefix ./packages/create-yoshi-app",
     "test:fullstack": "npm run fullstack --prefix ./packages/create-yoshi-app",
     "test:server": "npm run server --prefix ./packages/create-yoshi-app",
+    "test:bizmgr": "npm run bizmgr --prefix ./packages/create-yoshi-app",
     "test:library": "npm run library --prefix ./packages/create-yoshi-app",
     "test:ooi": "npm run ooi --prefix ./packages/create-yoshi-app",
     "test:templates:bm": "npm run flow-bm --prefix ./packages/create-yoshi-app",
