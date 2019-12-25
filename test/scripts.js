@@ -14,16 +14,11 @@ const defaultOptions = {
 const yoshiBin = require.resolve('../packages/yoshi/bin/yoshi-cli');
 
 module.exports = class Scripts {
-  constructor({
-    silent = false,
-    testDirectory,
-    serverProcessPort = 3000,
-    staticsServerPort = 3200,
-  }) {
+  constructor({ silent = false, testDirectory }) {
     this.silent = silent;
     this.testDirectory = testDirectory;
-    this.serverProcessPort = serverProcessPort;
-    this.staticsServerPort = staticsServerPort;
+    this.serverProcessPort = 3000;
+    this.staticsServerPort = 3200;
     this.yoshiCIDir = isCI
       ? `${global.testDirectory}/node_modules`
       : path.join(__dirname, '../packages/yoshi-flow-legacy/node_modules');
@@ -38,7 +33,6 @@ module.exports = class Scripts {
         //stdio: 'inherit',
         env: {
           PORT: this.serverProcessPort,
-          STATICS_PORT: this.staticsServerPort,
           NODE_PATH: this.yoshiCIDir,
           ...defaultOptions,
         },
@@ -109,7 +103,6 @@ module.exports = class Scripts {
       // stdio: 'inherit',
       env: {
         PORT: this.serverProcessPort,
-        STATICS_PORT: this.staticsServerPort,
         ...defaultOptions,
         ...env,
       },
@@ -149,7 +142,6 @@ module.exports = class Scripts {
       // stdio: 'inherit',
       env: {
         PORT: this.serverProcessPort,
-        STATICS_PORT: this.staticsServerPort,
       },
     });
 
@@ -187,7 +179,6 @@ module.exports = class Scripts {
       env: {
         NODE_PATH: this.yoshiCIDir,
         PORT: this.serverProcessPort,
-        STATICS_PORT: this.staticsServerPort,
       },
     });
 
