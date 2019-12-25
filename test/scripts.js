@@ -30,7 +30,7 @@ module.exports = class Scripts {
       [yoshiBin, 'start', '--server', 'dist/server.js'],
       {
         cwd: this.testDirectory,
-        stdio: 'inherit',
+        //stdio: 'inherit',
         env: {
           PORT: this.serverProcessPort,
           NODE_PATH: this.yoshiCIDir,
