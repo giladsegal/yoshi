@@ -4,6 +4,5 @@ dist
 build
 packages/eslint-config-yoshi/__tests__/rules
 test/projects/*/src/errors
-test/cases
 packages/create-yoshi-app/templates/business-manager-module/javascript/src/config.js
 packages/tslint-config-yoshi/__tests__/rules
