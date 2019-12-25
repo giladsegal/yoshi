@@ -19,13 +19,9 @@ module.exports = class Scripts {
     this.testDirectory = testDirectory;
     this.serverProcessPort = 3000;
     this.staticsServerPort = 3200;
-
-    //TODO: move yoshiCIDir to tmp folder
-    this.yoshiCIDir = path.join(
+    this.yoshiCIDir = isCI ? `${global.testDirectory}/node_modules` : path.join(
       __dirname,
-      isCI
-        ? './yoshiCIDir/node_modules'
-        : '../packages/yoshi-flow-legacy/node_modules',
+      '../packages/yoshi-flow-legacy/node_modules',
     );
   }
 

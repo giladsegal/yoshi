@@ -1,6 +1,8 @@
 const path = require('path');
 const chalk = require('chalk');
 const execa = require('execa');
+const fs = require('fs-extra');
+const tempy = require('tempy');
 const {
   publishMonorepo,
   authenticateToRegistry,
@@ -12,7 +14,10 @@ module.exports = async globalConfig => {
   const isCI = !!process.env.TEAMCITY_VERSION;
   if (isCI) {
     global.teardown = publishMonorepo();
+    const tempDir = tempy.directory();
+    global.testDirectory = path.join(tempDir, 'project');
     const yoshiCIDir = path.join(__dirname, '../yoshiCIDir');
+    await fs.copy(yoshiCIDir, global.testDirectory);
 
     console.log(
       `Running ${chalk.magenta(
@@ -20,9 +25,9 @@ module.exports = async globalConfig => {
       )}, that might take a few minutes... ⌛ \n`,
     );
 
-    authenticateToRegistry(yoshiCIDir);
+    authenticateToRegistry(global.testDirectory);
     await execa('npm install', {
-      cwd: yoshiCIDir,
+      cwd: global.testDirectory,
       shell: true,
       stdio: 'inherit',
       extendEnv: false,
