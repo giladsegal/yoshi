@@ -29,7 +29,7 @@ module.exports = class Scripts {
     );
   }
 
-  async start(callback) {
+  async start(callback = () => {}) {
     const startProcess = execa(
       'node',
       [yoshiBin, 'start', '--server', 'dist/server.js'],
@@ -102,7 +102,7 @@ module.exports = class Scripts {
     });
   }
 
-  async serve(callback) {
+  async serve(callback = () => {}) {
     await this.build();
 
     const staticsServerProcess = execa(
