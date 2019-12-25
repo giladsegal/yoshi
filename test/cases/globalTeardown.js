@@ -1,3 +1,5 @@
-module.exports = async () => {
-  global.teardown && global.teardown();
+const { teardown: teardownPuppeteer } = require('jest-environment-puppeteer');
+
+module.exports = async globalConfig => {
+  await teardownPuppeteer(globalConfig);
 };
