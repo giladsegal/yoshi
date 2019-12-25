@@ -1,6 +1,7 @@
 import path from 'path';
 import globby from 'globby';
 import { getProjectArtifactId } from 'yoshi-helpers/utils';
+import resolveFrom from 'resolve-from';
 
 export interface FlowEditorModel {
   appDefId: string;
@@ -16,20 +17,24 @@ export interface ComponentModel {
   type: ComponentType;
   fileName: string;
   controllerFileName: string;
-  settingsFileName: string | null;
+  settingsFileName?: string;
   id: string;
-}
-
-function resolveIfExists(filePath: string) {
-  try {
-    return require.resolve(filePath);
-  } catch (error) {
-    return null;
-  }
 }
 
 export async function generateFlowEditorModel(): Promise<FlowEditorModel> {
   const artifactId = getProjectArtifactId();
+  if (!artifactId) {
+    throw new Error(`artifact id not provided.
+    Please insert <artifactId>yourArtifactId</artifactId> in your "pom.xml"`);
+  }
+
+  const initApp = resolveFrom.silent('src/components', './app');
+  if (!initApp) {
+    throw new Error(`Missing app file.
+    Please create "app.js/ts" file in "${path.resolve(
+      './src/componets',
+    )}" directory`);
+  }
 
   const componentsDirectories = await globby('./src/components/*', {
     onlyDirectories: true,
@@ -39,27 +44,23 @@ export async function generateFlowEditorModel(): Promise<FlowEditorModel> {
   const componentsModel: Array<ComponentModel> = componentsDirectories.map(
     componentDirectory => {
       const componentName = path.basename(componentDirectory);
+      const resovleFromComponentDir = resolveFrom.silent.bind(
+        null,
+        componentDirectory,
+      );
 
-      const checkIfExists = (filePath: string) => {
-        return resolveIfExists(path.join(componentDirectory, filePath));
-      };
-
-      const widgetFileName = checkIfExists('Widget');
-      const pageFileName = checkIfExists('Page');
-      const controllerFileName = checkIfExists('controller');
-      const settingsFileName = checkIfExists('Settings');
+      const widgetFileName = resovleFromComponentDir('./Widget');
+      const pageFileName = resovleFromComponentDir('./Page');
+      const controllerFileName = resovleFromComponentDir('./controller');
+      const settingsFileName = resovleFromComponentDir('./Settings');
 
       if (!controllerFileName) {
         throw new Error(`Missing controller file for the component in "${componentDirectory}".
-        Please create "controller.js/ts" file in "${path.dirname(
-          componentDirectory,
-        )}" directory`);
+        Please create "controller.js/ts" file in "${componentDirectory}" directory`);
       }
       if (!widgetFileName && !pageFileName) {
         throw new Error(`Missing widget or page file for the component in "${componentDirectory}".
-        Please create either Widget.js/ts or Page.js/ts file in "${path.dirname(
-          componentDirectory,
-        )}" directory`);
+        Please create either Widget.js/ts or Page.js/ts file in "${componentDirectory}" directory`);
       }
 
       return {
@@ -73,15 +74,6 @@ export async function generateFlowEditorModel(): Promise<FlowEditorModel> {
       };
     },
   );
-
-  const [initApp] = await globby('./src/components/initApp.js', {
-    absolute: true,
-  });
-
-  if (!artifactId) {
-    throw new Error(`artifact id not provided.
-    Please insert <artifactId>yourArtifactId</artifactId> in your "pom.xml"`);
-  }
 
   return {
     // TODO: import from named export
