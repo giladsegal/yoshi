@@ -29,10 +29,6 @@ module.exports = class Scripts {
     );
   }
 
-  cleanupPublish() {
-    this.cleanup && this.cleanup();
-  }
-
   async start(callback) {
     const startProcess = execa(
       'node',

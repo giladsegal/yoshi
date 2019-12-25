@@ -11,7 +11,7 @@ module.exports = async globalConfig => {
   await setupPuppeteer(globalConfig);
   const isCI = !!process.env.TEAMCITY_VERSION;
   if (isCI) {
-    publishMonorepo();
+    global.teardown = publishMonorepo();
     const yoshiCIDir = path.join(__dirname, '../yoshiCIDir');
 
     console.log(
