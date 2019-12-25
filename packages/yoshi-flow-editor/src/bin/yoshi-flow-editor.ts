@@ -10,10 +10,15 @@ import { Config } from 'yoshi-config/build/config';
 import normalizeDebuggingArgs from 'yoshi-common/normalize-debugging-args';
 import verifyDependencies from 'yoshi-common/verify-dependencies';
 import verifyNodeVersion from 'yoshi-common/verify-node-version';
+import { generateFlowEditorModel, FlowEditorModel } from '../model';
 
 const defaultCommand = 'start';
 
-export type cliCommand = (argv: Array<string>, config: Config) => Promise<void>;
+export type cliCommand = (
+  argv: Array<string>,
+  config: Config,
+  model: FlowEditorModel,
+) => Promise<void>;
 
 const commands: {
   [command: string]: () => Promise<{ default: cliCommand }>;
@@ -88,11 +93,12 @@ Promise.resolve().then(async () => {
   }
 
   const config = loadConfig();
+  const model = await generateFlowEditorModel();
 
   const runCommand = (await commands[command]()).default;
 
   // legacy flow commands doen't need to be run
   if (typeof runCommand === 'function') {
-    await runCommand(forwardedArgs, config);
+    await runCommand(forwardedArgs, config, model);
   }
 });
