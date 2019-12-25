@@ -5,7 +5,7 @@ const { promisify } = require('util');
 const { waitForPort, waitForStdout } = require('./utils');
 
 const terminateAsync = promisify(terminate);
-const isCI = !!process.env.WITH_PUBLISH;
+const isPublish = !!process.env.WITH_PUBLISH;
 
 const defaultOptions = {
   BROWSER: 'none',
@@ -19,7 +19,7 @@ module.exports = class Scripts {
     this.testDirectory = testDirectory;
     this.serverProcessPort = 3000;
     this.staticsServerPort = 3200;
-    this.yoshiCIDir = isCI
+    this.yoshiCIDir = isPublish
       ? `${global.testDirectory}/node_modules`
       : path.join(__dirname, '../packages/yoshi-flow-legacy/node_modules');
   }
