@@ -11,7 +11,7 @@ const { setup: setupPuppeteer } = require('jest-environment-puppeteer');
 
 module.exports = async globalConfig => {
   await setupPuppeteer(globalConfig);
-  const isCI = !!process.env.TEAMCITY_VERSION;
+  const isCI = !!process.env.WITH_PUBLISH;
   if (isCI) {
     global.teardown = publishMonorepo();
     const tempDir = tempy.directory();

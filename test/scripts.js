@@ -5,7 +5,7 @@ const { promisify } = require('util');
 const { waitForPort, waitForStdout } = require('./utils');
 
 const terminateAsync = promisify(terminate);
-const isCI = !!process.env.TEAMCITY_VERSION;
+const isCI = !!process.env.WITH_PUBLISH;
 
 const defaultOptions = {
   BROWSER: 'none',
