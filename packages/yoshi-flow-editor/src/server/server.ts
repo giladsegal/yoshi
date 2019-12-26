@@ -5,7 +5,6 @@ import { Application } from 'express';
 import httpTestkit from '@wix/wix-http-testkit';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import { Dictionary } from '../types';
 import velocityDataPrivate from './velocity.private.data.json';
 import velocityData from './velocity.data.json';
 import renderVM from './vm';
@@ -59,7 +58,7 @@ app.use('/*settingsPanel', (req, res) => {
   res.send(renderVM('./src/templates/settingsPanel.vm', { settingsBundle }));
 });
 
-const state: Dictionary<string> = {};
+const state: Record<string, {}> = {};
 
 app.get('/state', (req, res) => {
   res.json(state[req.query.userId]);
@@ -70,7 +69,7 @@ app.post('/state', (req, res) => {
   res.json({ success: true });
 });
 
-const settings: Dictionary<string> = {};
+const settings: Record<string, {}> = {};
 
 const defaultSettings = {
   title: 'My TODO App!',
