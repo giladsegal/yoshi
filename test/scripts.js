@@ -77,10 +77,6 @@ module.exports = class Scripts {
   async build(env = {}, args = []) {
     return execa('node', [yoshiBin, 'build', ...args], {
       cwd: this.testDirectory,
-      env: {
-        ...defaultOptions,
-        ...env,
-      },
       shell: true,
       all: true,
     });
