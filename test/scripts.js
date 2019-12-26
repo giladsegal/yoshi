@@ -3,7 +3,6 @@ const execa = require('execa');
 const terminate = require('terminate');
 const { promisify } = require('util');
 const { waitForPort, waitForStdout } = require('./utils');
-const { ciEnv, localEnv } = require('../scripts/utils/constants');
 
 const terminateAsync = promisify(terminate);
 const isPublish = !!process.env.WITH_PUBLISH;
@@ -165,7 +164,7 @@ module.exports = class Scripts {
   }
   async serveWithCallback(callback = () => {}) {
     try {
-      await this.build(ciEnv);
+      await this.build();
     } catch(e) {
       console.log('------------------------------------');
       console.log(e.all);
