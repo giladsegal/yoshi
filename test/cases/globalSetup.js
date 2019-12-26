@@ -16,8 +16,8 @@ module.exports = async globalConfig => {
     global.teardown = publishMonorepo();
     const tempDir = tempy.directory();
     global.testDirectory = path.join(tempDir, 'project');
-    const yoshiCIDir = path.join(__dirname, '../yoshiCIDir');
-    await fs.copy(yoshiCIDir, global.testDirectory);
+    const yoshiPublishDir = path.join(__dirname, './yoshi-publish');
+    await fs.copy(yoshiPublishDir, global.testDirectory);
 
     console.log(
       `Running ${chalk.magenta(

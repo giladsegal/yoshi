@@ -19,7 +19,7 @@ module.exports = class Scripts {
     this.testDirectory = testDirectory;
     this.serverProcessPort = 3000;
     this.staticsServerPort = 3200;
-    this.yoshiCIDir = isPublish
+    this.yoshiPublishDir = isPublish
       ? `${global.testDirectory}/node_modules`
       : path.join(__dirname, '../packages/yoshi-flow-legacy/node_modules');
   }
@@ -33,7 +33,7 @@ module.exports = class Scripts {
         //stdio: 'inherit',
         env: {
           PORT: this.serverProcessPort,
-          NODE_PATH: this.yoshiCIDir,
+          NODE_PATH: this.yoshiPublishDir,
           ...defaultOptions,
         },
       },
@@ -89,7 +89,7 @@ module.exports = class Scripts {
     return execa('node', [yoshiBin, 'test'], {
       cwd: this.testDirectory,
       env: {
-        NODE_PATH: this.yoshiCIDir,
+        NODE_PATH: this.yoshiPublishDir,
         ...defaultOptions,
         ...env,
       },
@@ -177,7 +177,7 @@ module.exports = class Scripts {
       cwd: this.testDirectory,
       // stdio: 'inherit',
       env: {
-        NODE_PATH: this.yoshiCIDir,
+        NODE_PATH: this.yoshiPublishDir,
         PORT: this.serverProcessPort,
       },
     });
