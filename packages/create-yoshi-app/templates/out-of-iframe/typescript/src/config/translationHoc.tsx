@@ -17,7 +17,7 @@ export const TranslationProvider: React.FC<TranslationProviderProps> = ({
 
 type TranslationFunction = (
   key: string,
-  values?: {},
+  values: {},
   fallback?: string,
 ) => string;
 
