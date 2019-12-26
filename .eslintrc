@@ -76,7 +76,7 @@
       }
     },
     {
-      "files": ["test/projects/**/*", "test/cases/**/*"],
+      "files": ["test/projects/**/*", "test/cases/**/*", "test/cases-typescript/**/*"],
       "rules": {
         "import/no-unresolved": 0,
         "import/no-extraneous-dependencies": 0

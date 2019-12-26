@@ -1,0 +1,7 @@
+{
+  "name": "json-inclusion",
+  "private": true,
+  "yoshi": {
+    "projectType": "app"
+  }
+}
