@@ -2,8 +2,10 @@ import path from 'path';
 import globby from 'globby';
 import { getProjectArtifactId } from 'yoshi-helpers/utils';
 import resolveFrom from 'resolve-from';
+import { Config } from 'yoshi-config/build/config';
 
 export interface FlowEditorModel {
+  appName: string;
   appDefId: string;
   artifactId: string;
   initApp: string;
@@ -21,7 +23,13 @@ export interface ComponentModel {
   id: string;
 }
 
-export async function generateFlowEditorModel(): Promise<FlowEditorModel> {
+export async function generateFlowEditorModel(
+  config: Config,
+): Promise<FlowEditorModel> {
+  if (!config.name) {
+    throw new Error(`Package name not provided.
+      Please fill in "name" property in your "package.json" file`);
+  }
   const artifactId = getProjectArtifactId();
   if (!artifactId) {
     throw new Error(`artifact id not provided.
@@ -76,6 +84,7 @@ export async function generateFlowEditorModel(): Promise<FlowEditorModel> {
   );
 
   return {
+    appName: config.name,
     // TODO: import from named export
     appDefId: '',
     artifactId,

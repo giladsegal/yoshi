@@ -93,7 +93,7 @@ Promise.resolve().then(async () => {
   }
 
   const config = loadConfig();
-  const model = await generateFlowEditorModel();
+  const model = await generateFlowEditorModel(config);
 
   const runCommand = (await commands[command]()).default;
 
