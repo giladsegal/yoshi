@@ -2,7 +2,7 @@ import * as React from 'react';
 
 const TranslationContext = React.createContext({});
 export interface TranslationProviderProps {
-  value: Record<string, string>;
+  value?: Record<string, string>;
 }
 export const TranslationProvider: React.FC<TranslationProviderProps> = ({
   value,
