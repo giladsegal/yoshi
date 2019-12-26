@@ -77,11 +77,8 @@ module.exports = class Scripts {
   async build(env = {}, args = []) {
     return execa('node', [yoshiBin, 'build', ...args], {
       cwd: this.testDirectory,
-      env: {
-        ...defaultOptions,
-        ...env,
-      },
-      stdio: this.silent ? 'pipe' : 'inherit',
+      shell: true,
+      all: true,
     });
   }
 
@@ -162,7 +159,13 @@ module.exports = class Scripts {
     };
   }
   async serveWithCallback(callback = () => {}) {
-    await this.build();
+    try {
+      await this.build();
+    } catch(e) {
+      console.log('------------------------------------');
+      console.log(e.all);
+      console.log('------------------------------------');
+    }
 
     const staticsServerProcess = execa(
       'npx',
