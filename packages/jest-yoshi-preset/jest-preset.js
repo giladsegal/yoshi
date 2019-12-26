@@ -27,7 +27,12 @@ const projectOverrideMapping = {
   e2e: 'e2eOptions',
   spec: 'specOptions',
 };
-const supportedProjectOverrideKeys = ['globals', 'testURL', 'moduleNameMapper'];
+
+const supportedProjectOverrideKeys = {
+  [projectOverrideMapping.spec]: ['globals', 'testURL', 'moduleNameMapper'],
+  [projectOverrideMapping.e2e]: ['moduleNameMapper'],
+};
+
 const supportedGlobalOverrideKeys = [
   'collectCoverage',
   'collectCoverageFrom',
@@ -86,8 +91,25 @@ const config = {
         const projectOverrides = jestYoshiConfig[projectOverrideKey];
 
         const projectValidOverrides = projectOverrides
-          ? pick(projectOverrides, supportedProjectOverrideKeys)
+          ? pick(
+              projectOverrides,
+              supportedProjectOverrideKeys[projectOverrideKey],
+            )
           : {};
+
+        if (projectValidOverrides.length !== projectOverrides.length) {
+          const validOverrideKeys = Object.keys(projectValidOverrides);
+          const unsupportedOverrides = Object.keys(projectOverrides).filter(
+            overrideKey => !validOverrideKeys.includes(overrideKey),
+          );
+          console.log(
+            chalk.yellow(
+              `You have configured unsupported jest preset overrides in ${projectOverrideKey}: 
+              ${unsupportedOverrides.join(',')} - These will not be applied
+              `,
+            ),
+          );
+        }
 
         // We recommend projects use the `__tests__` directory But we support `test`
         // too
