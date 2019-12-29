@@ -1,7 +1,7 @@
 import path from 'path';
 import globby from 'globby';
 import { getProjectArtifactId } from 'yoshi-helpers/utils';
-import resolveFrom from 'resolve-from';
+import resolve from 'resolve';
 
 export interface FlowEditorModel {
   appDefId: string;
@@ -21,29 +21,13 @@ export interface ComponentModel {
   id: string;
 }
 
-function resolveFromWithExtensions(
-  dir: string,
-  fileName: string,
-  extensions: Array<string> = ['ts'],
-) {
-  let extensionIndex = 0;
-  let resolution = null;
-  while (!resolution && extensionIndex < extensions.length) {
-    try {
-      resolution = require.resolve(
-        path.join(
-          path.resolve(dir),
-          `${fileName}.${extensions[extensionIndex]}`,
-        ),
-      );
-    } catch (error) {
-      extensionIndex++;
-    }
-  }
-  if (!resolution) {
-    resolution = resolveFrom.silent(dir, `./${fileName}`);
-  }
-  return resolution;
+const defaultExtensions = ['.ts', '.js'];
+function resolveFrom(dir: string, fileName: string, withTsx: boolean = false) {
+  try {
+    return resolve.sync(path.join(dir, fileName), {
+      extensions: withTsx ? ['.tsx', ...defaultExtensions] : defaultExtensions,
+    });
+  } catch (error) {}
 }
 
 export async function generateFlowEditorModel(): Promise<FlowEditorModel> {
@@ -53,7 +37,7 @@ export async function generateFlowEditorModel(): Promise<FlowEditorModel> {
     Please insert <artifactId>yourArtifactId</artifactId> in your "pom.xml"`);
   }
 
-  const initApp = resolveFromWithExtensions('src', 'app');
+  const initApp = resolveFrom(path.join(process.cwd(), 'src'), 'app');
   if (!initApp) {
     throw new Error(`Missing app file.
     Please create "app.js/ts" file in "${path.resolve('./src')}" directory`);
@@ -68,24 +52,13 @@ export async function generateFlowEditorModel(): Promise<FlowEditorModel> {
     componentDirectory => {
       const componentName = path.basename(componentDirectory);
 
-      const widgetFileName = resolveFromWithExtensions(
-        componentDirectory,
-        'Widget',
-        ['tsx', 'ts'],
-      );
-      const pageFileName = resolveFromWithExtensions(
-        componentDirectory,
-        'Page',
-        ['tsx', 'ts'],
-      );
-      const controllerFileName = resolveFromWithExtensions(
-        componentDirectory,
-        'controller',
-      );
-      const settingsFileName = resolveFromWithExtensions(
+      const widgetFileName = resolveFrom(componentDirectory, 'Widget', true);
+      const pageFileName = resolveFrom(componentDirectory, 'Page', true);
+      const controllerFileName = resolveFrom(componentDirectory, 'controller');
+      const settingsFileName = resolveFrom(
         componentDirectory,
         'Settings',
-        ['tsx', 'ts'],
+        true,
       );
 
       if (!controllerFileName) {
