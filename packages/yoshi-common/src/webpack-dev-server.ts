@@ -119,7 +119,7 @@ export class WebpackDevServer extends OriginalWebpackDevServer {
 
   listenPromise() {
     const listenTarget = this.suricate
-      ? createDevServerTunnelSocket(this.appName)
+      ? createDevServerTunnelSocket(this.appName, this.port)
       : this.port;
 
     return new Promise((resolve, reject) => {
