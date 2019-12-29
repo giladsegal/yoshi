@@ -21,6 +21,31 @@ export interface ComponentModel {
   id: string;
 }
 
+function resolveFromWithExtensions(
+  dir: string,
+  fileName: string,
+  extensions: Array<string> = ['ts'],
+) {
+  let extensionIndex = 0;
+  let resolution = null;
+  while (!resolution && extensionIndex < extensions.length) {
+    try {
+      resolution = require.resolve(
+        path.join(
+          path.resolve(dir),
+          `${fileName}.${extensions[extensionIndex]}`,
+        ),
+      );
+    } catch (error) {
+      extensionIndex++;
+    }
+  }
+  if (!resolution) {
+    resolution = resolveFrom.silent(dir, `./${fileName}`);
+  }
+  return resolution;
+}
+
 export async function generateFlowEditorModel(): Promise<FlowEditorModel> {
   const artifactId = getProjectArtifactId();
   if (!artifactId) {
@@ -28,7 +53,7 @@ export async function generateFlowEditorModel(): Promise<FlowEditorModel> {
     Please insert <artifactId>yourArtifactId</artifactId> in your "pom.xml"`);
   }
 
-  const initApp = resolveFrom.silent('src', './app');
+  const initApp = resolveFromWithExtensions('src', 'app');
   if (!initApp) {
     throw new Error(`Missing app file.
     Please create "app.js/ts" file in "${path.resolve('./src')}" directory`);
@@ -42,15 +67,26 @@ export async function generateFlowEditorModel(): Promise<FlowEditorModel> {
   const componentsModel: Array<ComponentModel> = componentsDirectories.map(
     componentDirectory => {
       const componentName = path.basename(componentDirectory);
-      const resovleFromComponentDir = resolveFrom.silent.bind(
-        null,
-        componentDirectory,
-      );
 
-      const widgetFileName = resovleFromComponentDir('./Widget');
-      const pageFileName = resovleFromComponentDir('./Page');
-      const controllerFileName = resovleFromComponentDir('./controller');
-      const settingsFileName = resovleFromComponentDir('./Settings');
+      const widgetFileName = resolveFromWithExtensions(
+        componentDirectory,
+        'Widget',
+        ['tsx', 'ts'],
+      );
+      const pageFileName = resolveFromWithExtensions(
+        componentDirectory,
+        'Page',
+        ['tsx', 'ts'],
+      );
+      const controllerFileName = resolveFromWithExtensions(
+        componentDirectory,
+        'controller',
+      );
+      const settingsFileName = resolveFromWithExtensions(
+        componentDirectory,
+        'Settings',
+        ['tsx', 'ts'],
+      );
 
       if (!controllerFileName) {
         throw new Error(`Missing controller file for the component in "${componentDirectory}".
@@ -58,7 +94,7 @@ export async function generateFlowEditorModel(): Promise<FlowEditorModel> {
       }
       if (!widgetFileName && !pageFileName) {
         throw new Error(`Missing widget or page file for the component in "${componentDirectory}".
-        Please create either Widget.js/ts or Page.js/ts file in "${componentDirectory}" directory`);
+        Please create either Widget.js/ts/tsx or Page.js/ts/tsx file in "${componentDirectory}" directory`);
       }
 
       return {
