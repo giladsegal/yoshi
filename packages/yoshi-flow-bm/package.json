@@ -18,7 +18,7 @@
     "yoshi-config": "4.23.3",
     "yoshi-flow-bm-runtime": "4.24.0",
     "yoshi-flow-legacy": "4.25.1",
-    "yoshi-common": "4.23.5",
+    "yoshi-common": "4.25.1",
     "yoshi-helpers": "4.23.5"
   },
   "devDependencies": {
