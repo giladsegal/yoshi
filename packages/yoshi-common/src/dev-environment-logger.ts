@@ -1,8 +1,46 @@
 import chalk from 'chalk';
+import { Urls } from 'react-dev-utils/WebpackDevServerUtils';
 import { State } from './dev-environment';
 import { getUrl, getDevServerUrl } from './utils/suricate';
 
-// TODO - add suricate print
+const logSuricateUrls = (appName: string) => {
+  console.log(`  ${chalk.bold('Public:')} ${chalk.magenta(getUrl(appName))}`);
+  console.log();
+  console.log(
+    `Your bundles and other static assets are served from your ${chalk.bold(
+      'dev-server',
+    )}.`,
+  );
+  console.log();
+  console.log(
+    `  ${chalk.bold('Public:')} ${chalk.magenta(getDevServerUrl(appName))}`,
+  );
+};
+
+const logLocalUrls = (serverUrls: Urls, devServerUrls: Urls) => {
+  console.log(
+    `  ${chalk.bold('Local:')}            ${serverUrls.localUrlForTerminal}`,
+  );
+  console.log(
+    `  ${chalk.bold('On Your Network:')}  ${serverUrls.lanUrlForTerminal}`,
+  );
+
+  console.log();
+  console.log(
+    `Your bundles and other static assets are served from your ${chalk.bold(
+      'dev-server',
+    )}.`,
+  );
+  console.log();
+
+  console.log(
+    `  ${chalk.bold('Local:')}            ${devServerUrls.localUrlForTerminal}`,
+  );
+  console.log(
+    `  ${chalk.bold('On Your Network:')}  ${devServerUrls.lanUrlForTerminal}`,
+  );
+};
+
 export default (state: State) => {
   switch (state.status) {
     case 'compiling':
@@ -18,38 +56,11 @@ export default (state: State) => {
       );
       console.log();
 
-      console.log(getUrl(state.appName));
-      console.log(getDevServerUrl(state.appName));
-
-      console.log(
-        `  ${chalk.bold('Local:')}            ${
-          state.serverUrls.localUrlForTerminal
-        }`,
-      );
-      console.log(
-        `  ${chalk.bold('On Your Network:')}  ${
-          state.serverUrls.lanUrlForTerminal
-        }`,
-      );
-
-      console.log();
-      console.log(
-        `Your bundles and other static assets are served from your ${chalk.bold(
-          'dev-server',
-        )}.`,
-      );
-      console.log();
-
-      console.log(
-        `  ${chalk.bold('Local:')}            ${
-          state.devServerUrls.localUrlForTerminal
-        }`,
-      );
-      console.log(
-        `  ${chalk.bold('On Your Network:')}  ${
-          state.devServerUrls.lanUrlForTerminal
-        }`,
-      );
+      if (state.suricate) {
+        logSuricateUrls(state.appName);
+      } else {
+        logLocalUrls(state.serverUrls, state.devServerUrls);
+      }
 
       console.log();
       console.log('Note that the development build is not optimized.');

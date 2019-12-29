@@ -33,6 +33,7 @@ export type State =
       status: 'success';
       serverUrls: Urls;
       devServerUrls: Urls;
+      suricate: boolean;
       appName: string;
     } & WebpackStatus)
   | ({ status: 'errors' } & WebpackStatus)
@@ -94,8 +95,9 @@ export default class DevEnvironment {
 
         this.store.setState({
           status: 'success',
-          appName: this.webpackDevServer.appName,
+          appName: this.appName,
           serverUrls,
+          suricate: this.suricate,
           devServerUrls,
           ...messages,
         } as State);
