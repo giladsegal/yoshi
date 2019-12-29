@@ -9,7 +9,11 @@ import ServerProcess from './server-process';
 import { WebpackDevServer, host } from './webpack-dev-server';
 import { addEntry, createCompiler } from './webpack-utils';
 import { isTruthy } from './utils/helpers';
-import { getDevServerSocketPath } from './utils/suricate';
+import {
+  getUrl as getTunnelUrl,
+  getDevServerSocketPath,
+} from './utils/suricate';
+
 import devEnvironmentLogger from './dev-environment-logger';
 
 const isInteractive = process.stdout.isTTY;
@@ -40,17 +44,23 @@ export default class DevEnvironment {
   public store: Store<State>;
   private multiCompiler: webpack.MultiCompiler;
   private startUrl: StartUrl;
+  private suricate: boolean;
+  private appName: string;
 
   constructor(
     webpackDevServer: WebpackDevServer,
     serverProcess: ServerProcess,
     multiCompiler: webpack.MultiCompiler,
+    appName: string,
+    suricate: boolean = false,
     startUrl?: StartUrl,
   ) {
     this.webpackDevServer = webpackDevServer;
     this.serverProcess = serverProcess;
     this.multiCompiler = multiCompiler;
     this.startUrl = startUrl;
+    this.appName = appName;
+    this.suricate = suricate;
 
     this.store = createStore<State>();
 
@@ -192,7 +202,11 @@ export default class DevEnvironment {
 
     await this.serverProcess.initialize();
 
-    openBrowser(this.startUrl || 'http://localhost:3000');
+    const startUrl = this.suricate
+      ? getTunnelUrl(this.appName)
+      : this.startUrl || 'http://localhost:3000';
+
+    openBrowser(startUrl);
   }
 
   static async create({
@@ -284,6 +298,8 @@ export default class DevEnvironment {
       webpackDevServer,
       serverProcess,
       multiCompiler,
+      appName,
+      suricate,
       startUrl,
     );
 
