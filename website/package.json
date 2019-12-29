@@ -12,8 +12,5 @@
   },
   "devDependencies": {
     "docusaurus": "^1.8.1"
-  },
-  "optionalDependencies": {
-    "teamcity-surge-autorelease": "^1.0.300"
   }
 }
