@@ -12,7 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "tslint-config-yoshi-base": "4.22.0",
-    "tslint-react": "^3.6.0"
+    "tslint-react": "^4.0.0"
   },
   "peerDependencies": {
     "tslint": ">=5.10.0",

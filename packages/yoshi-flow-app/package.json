@@ -22,8 +22,8 @@
   },
   "dependencies": {
     "arg": "4.1.2",
-    "bfj": "6.1.2",
-    "chalk": "2.4.2",
+    "bfj": "7.0.2",
+    "chalk": "3.0.0",
     "fs-extra": "8.1.0",
     "lodash": "4.17.15",
     "yoshi-common": "4.25.2",

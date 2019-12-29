@@ -18,14 +18,14 @@
   "devDependencies": {
     "@types/fs-extra": "^8.0.1",
     "@types/lodash": "^4.14.146",
-    "@types/npm-package-arg": "^5.1.0",
+    "@types/npm-package-arg": "^6.0.0",
     "@types/webpack": "4.41.0"
   },
   "dependencies": {
     "arg": "^4.1.1",
-    "bfj": "6.1.2",
-    "chalk": "^2.4.2",
-    "execa": "^3.3.0",
+    "bfj": "7.0.2",
+    "chalk": "^3.0.0",
+    "execa": "^4.0.0",
     "fs-extra": "^8.1.0",
     "globby": "^10.0.1",
     "import-cwd": "^3.0.0",

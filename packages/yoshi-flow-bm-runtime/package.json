@@ -15,9 +15,9 @@
     "@wix/wix-experiments": "3.0.304",
     "@wix/wix-experiments-react": "3.0.387",
     "axios": "0.19.0",
-    "i18next": "8.4.3",
+    "i18next": "19.0.2",
     "react": "16.8.3",
-    "react-i18next": "4.8.0",
+    "react-i18next": "11.2.7",
     "react-module-container": "^1.0.2099"
   },
   "devDependencies": {
