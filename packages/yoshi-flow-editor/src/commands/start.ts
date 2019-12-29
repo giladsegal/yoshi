@@ -11,7 +11,6 @@ import {
   createServerWebpackConfig,
   createWebWorkerWebpackConfig,
 } from '../webpack.config';
-import { FlowEditorModel } from '../model';
 import {
   buildEditorPlatformEntries,
   buildViewerScriptEntry,
@@ -20,7 +19,7 @@ import {
 
 const join = (...dirs: Array<string>) => path.join(process.cwd(), ...dirs);
 
-const start: cliCommand = async function(argv, config, model: FlowEditorModel) {
+const start: cliCommand = async function(argv, config, model) {
   const args = arg(
     {
       // Types
