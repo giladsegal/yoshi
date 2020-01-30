@@ -198,6 +198,7 @@ export function createWebWorkerWebpackConfig(
     cwd: pkg.location,
     configName: 'web-worker',
     target: 'webworker',
+    createEjsTemplates: pkg.config.experimentalBuildHtml,
     isDev,
     isHot,
     ...defaultOptions,
