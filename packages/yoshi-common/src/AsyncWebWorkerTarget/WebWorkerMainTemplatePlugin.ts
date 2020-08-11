@@ -20,6 +20,7 @@ export class WebWorkerMainTemplatePlugin {
             '',
             '// object to store loaded chunks',
             '// "1" means "already loaded"',
+            '// "Promise" is the signal for "already loading"',
             'var installedChunks = {',
             Template.indent(
               chunk.ids.map((id) => `${JSON.stringify(id)}: 1`).join(',\n'),
@@ -39,9 +40,12 @@ export class WebWorkerMainTemplatePlugin {
           'promises.push(Promise.resolve().then(function() {',
           Template.indent([
             '// "1" is the signal for "already loaded"',
+            'if (installedChunks[chunkId] === 1) return;',
+            '// "Promise" is the signal for "already loading"',
+            'if(installedChunks[chunkId] instanceof Promise) return installedChunks[chunkId];',
             'if(!installedChunks[chunkId]) {',
             Template.indent([
-              'return fetch(' +
+              'return installedChunks[chunkId] = fetch(' +
                 '__webpack_require__.p + ' +
                 mainTemplate.getAssetPath(JSON.stringify(chunkFilename), {
                   hash: `" + ${mainTemplate.renderCurrentHashCode(hash)} + "`,
@@ -96,7 +100,14 @@ export class WebWorkerMainTemplatePlugin {
                 ')',
               Template.indent([
                 '.then(function(resp) {',
-                Template.indent('return resp.text();'),
+                Template.indent([
+                  'if (!resp.ok) {',
+                  Template.indent(
+                    "throw new Error('Loading chunk ' + chunkId + ' failed with status ' + resp.status + '(' + resp.statusText + ')');",
+                  ),
+                  '}',
+                  'return resp.text();',
+                ]),
                 '})',
                 '.then(function(moduleContent) {',
                 Template.indent('Function(moduleContent)()'),
